@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/clivern/Poodle/master/assets/img/gopher.png?v=0.0.1" width="180" />
+    <img src="/assets/img/gopher.png" width="180" />
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
