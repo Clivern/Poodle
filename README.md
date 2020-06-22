@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/assets/img/gopher1.png" width="180" />
+    <img src="/assets/gopher1.png" width="180" />
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
