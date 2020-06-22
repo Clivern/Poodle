@@ -5,7 +5,7 @@
 package main
 
 import (
-	"github.com/clivern/poodle/internal/app/cmd"
+	"github.com/clivern/poodle/cmd"
 )
 
 var (
