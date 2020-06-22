@@ -10,14 +10,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Setup and Configure Poodle",
+var configureCmd = &cobra.Command{
+	Use:   "configure",
+	Short: "Configure Poodle",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(`WIP`)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(initCmd)
+	rootCmd.AddCommand(configureCmd)
 }

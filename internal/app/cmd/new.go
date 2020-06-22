@@ -12,7 +12,7 @@ import (
 
 var newCmd = &cobra.Command{
 	Use:   "new",
-	Short: "Create a New Service Config File",
+	Short: "Creates a new API service definition file",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(`WIP`)
 	},

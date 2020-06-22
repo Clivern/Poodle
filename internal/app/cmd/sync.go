@@ -10,14 +10,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var startCmd = &cobra.Command{
-	Use:   "start",
-	Short: "Interact with one of the configured API services",
+var syncCmd = &cobra.Command{
+	Use:   "sync",
+	Short: "Sync API services definitions",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(`WIP`)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(syncCmd)
 }
