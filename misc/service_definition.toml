@@ -1,3 +1,79 @@
-# This is a TOML document.
+# API Service Definition Example
 
-title = "TOML Example"
+[General]
+    id = "clivern_poodle"
+    name = "clivern - poodle"
+    description = ""
+    timeout = "30s"
+    service_url = "https://example.com/api/v1"
+    # These headers will be applied to all endpoints http calls
+    headers = [ ["Content-Type", "application/json"] ]
+
+[Security]
+    # Supported Types are basic, bearer and api_key and none
+    scheme = "none"
+
+    [Security.Basic]
+        username = ""
+        password = ""
+        header = ["Authorization", "base64({$username}:{$password})"]
+
+    [Security.ApiKey]
+        header_name =
+        header_value =
+        header = ["X-API-KEY", "secret goes here"]
+
+    [Security.Bearer]
+        header = ["Authorization", "Bearer {$token}"]
+
+[Endpoints]
+
+    [item.create]
+        name = "Create an item"
+        description = ""
+        method = "post"
+        headers = []
+        uri = "/item"
+        body = """
+        {
+            "name": "{$name}"
+            "type": "{$type:default}"
+        }
+        """
+
+    [item.list]
+        name = "Get a list of items"
+        description = ""
+        method = "get"
+        headers = []
+        uri = "/item"
+        body = ""
+
+    [item.get]
+        name = "Get an item"
+        description = ""
+        method = "get"
+        headers = []
+        uri = "/item/{$id}"
+        body = ""
+
+    [item.delete]
+        name = "Delete an item"
+        description = ""
+        method = "delete"
+        headers = []
+        uri = "/item/{$id}"
+        body = ""
+
+    [item.update]
+        name = "Update an item"
+        description = ""
+        method = "put"
+        headers = []
+        uri = "/item/{$id}"
+        body = """
+        {
+            "name": "{$name}",
+            "type": "{$type:default}"
+        }
+        """
