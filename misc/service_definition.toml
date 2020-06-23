@@ -24,9 +24,9 @@
     [Security.Bearer]
         header = ["Authorization", "Bearer {$token}"]
 
-[Endpoints]
+[Endpoint]
 
-    [item.create]
+    [Endpoint.item_create]
         name = "Create an item"
         description = ""
         method = "post"
@@ -40,7 +40,7 @@
         }
         """
 
-    [item.list]
+    [Endpoint.item_list]
         name = "Get a list of items"
         description = ""
         method = "get"
@@ -49,7 +49,7 @@
         uri = "/item"
         body = ""
 
-    [item.get]
+    [Endpoint.item_get]
         name = "Get an item"
         description = ""
         method = "get"
@@ -58,7 +58,7 @@
         uri = "/item/{$id}"
         body = ""
 
-    [item.delete]
+    [Endpoint.item_delete]
         name = "Delete an item"
         description = ""
         method = "delete"
@@ -67,7 +67,7 @@
         uri = "/item/{$id}"
         body = ""
 
-    [item.update]
+    [Endpoint.item_update]
         name = "Update an item"
         description = ""
         method = "put"
