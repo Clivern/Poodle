@@ -19,8 +19,6 @@
         header = ["Authorization", "base64({$username}:{$password})"]
 
     [Security.ApiKey]
-        header_name =
-        header_value =
         header = ["X-API-KEY", "secret goes here"]
 
     [Security.Bearer]
@@ -33,6 +31,7 @@
         description = ""
         method = "post"
         headers = []
+        parameters = []
         uri = "/item"
         body = """
         {
@@ -46,6 +45,7 @@
         description = ""
         method = "get"
         headers = []
+        parameters = [ ["limit", "{$limit:100}"], ["offset", "{$offset:0}"] ]
         uri = "/item"
         body = ""
 
@@ -54,6 +54,7 @@
         description = ""
         method = "get"
         headers = []
+        parameters = []
         uri = "/item/{$id}"
         body = ""
 
@@ -62,6 +63,7 @@
         description = ""
         method = "delete"
         headers = []
+        parameters = []
         uri = "/item/{$id}"
         body = ""
 
@@ -70,6 +72,7 @@
         description = ""
         method = "put"
         headers = []
+        parameters = []
         uri = "/item/{$id}"
         body = """
         {
