@@ -1,0 +1,82 @@
+# API Service Definition Example
+
+[General]
+    id = "clivern_poodle"
+    name = "clivern - poodle"
+    description = ""
+    timeout = "30s"
+    service_url = "https://example.com/api/v1"
+    # These headers will be applied to all endpoints http calls
+    headers = [ ["Content-Type", "application/json"] ]
+
+[Security]
+    # Supported Types are basic, bearer and api_key and none
+    scheme = "none"
+
+    [Security.Basic]
+        username = ""
+        password = ""
+        header = ["Authorization", "base64({$username}:{$password})"]
+
+    [Security.ApiKey]
+        header = ["X-API-KEY", "secret goes here"]
+
+    [Security.Bearer]
+        header = ["Authorization", "Bearer {$token}"]
+
+[Endpoint]
+
+    [Endpoint.item_create]
+        name = "Create an item"
+        description = ""
+        method = "post"
+        headers = []
+        parameters = []
+        uri = "/item"
+        body = """
+        {
+            "name": "{$name}"
+            "type": "{$type:default}"
+        }
+        """
+
+    [Endpoint.item_list]
+        name = "Get a list of items"
+        description = ""
+        method = "get"
+        headers = []
+        parameters = [ ["limit", "{$limit:100}"], ["offset", "{$offset:0}"] ]
+        uri = "/item"
+        body = ""
+
+    [Endpoint.item_get]
+        name = "Get an item"
+        description = ""
+        method = "get"
+        headers = []
+        parameters = []
+        uri = "/item/{$id}"
+        body = ""
+
+    [Endpoint.item_delete]
+        name = "Delete an item"
+        description = ""
+        method = "delete"
+        headers = []
+        parameters = []
+        uri = "/item/{$id}"
+        body = ""
+
+    [Endpoint.item_update]
+        name = "Update an item"
+        description = ""
+        method = "put"
+        headers = []
+        parameters = []
+        uri = "/item/{$id}"
+        body = """
+        {
+            "name": "{$name}",
+            "type": "{$type:default}"
+        }
+        """

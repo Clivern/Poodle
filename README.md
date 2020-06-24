@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/assets/img/gopher1.png" width="180" />
+    <img src="/assets/gopher1.png" width="180" />
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
@@ -14,8 +14,22 @@
 
 ## Documentation
 
+Download [the latest poodle binary.](https://github.com/Clivern/Poodle/releases)
+
+```zsh
+$ curl -sL https://github.com/Clivern/Poodle/releases/download/vx.x.x/poodle_x.x.x_OS.tar.gz | tar xz
 ```
-$ ~
+
+To configure poodle
+
+```zsh
+$ ./poodle configure
+```
+
+To list all commands
+
+```zsh
+$ ./poodle help
 ```
 
 

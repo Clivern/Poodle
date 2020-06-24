@@ -1,0 +1,18 @@
+# Poodle Configs
+
+[General]
+    editor = "nano"
+    column = 40
+    selectcmd = "fzf --ansi"
+    backend = "gist"
+    sortby = ""
+
+[Gist]
+    file_name = "poodle-definitions.toml"
+    access_token = "secret goes here"
+    gist_id = "github gist id goes here"
+    public = false
+    auto_sync = false
+
+[Services]
+    directory = "/path/to/services/definitions/"

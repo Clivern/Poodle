@@ -23,7 +23,7 @@ var (
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Get current and latest version",
+	Short: "Print the version number",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(
 			fmt.Sprintf(
