@@ -11,6 +11,7 @@
     file_name = "poodle-definitions.toml"
     access_token = "secret goes here"
     gist_id = "github gist id goes here"
+    username = "github_username"
     public = false
     auto_sync = false
 

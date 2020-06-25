@@ -106,6 +106,34 @@ func (h *HTTPClient) Put(ctx context.Context, endpoint string, data string, para
 	return resp, err
 }
 
+// Patch http call
+func (h *HTTPClient) Patch(ctx context.Context, endpoint string, data string, parameters, headers map[string]string) (*http.Response, error) {
+
+	endpoint, err := h.BuildParameters(endpoint, parameters)
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, _ := http.NewRequest("PATCH", endpoint, bytes.NewBuffer([]byte(data)))
+
+	req = req.WithContext(ctx)
+
+	for k, v := range headers {
+		req.Header.Add(k, v)
+	}
+
+	client := http.Client{}
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, err
+}
+
 // Delete http call
 func (h *HTTPClient) Delete(ctx context.Context, endpoint string, parameters, headers map[string]string) (*http.Response, error) {
 
@@ -179,4 +207,9 @@ func (h *HTTPClient) ToString(response *http.Response) (string, error) {
 // GetStatusCode response status code
 func (h *HTTPClient) GetStatusCode(response *http.Response) int {
 	return response.StatusCode
+}
+
+// GetHeaderValue get response header value
+func (h *HTTPClient) GetHeaderValue(response *http.Response, key string) string {
+	return response.Header.Get(key)
 }
