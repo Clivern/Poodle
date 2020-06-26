@@ -11,9 +11,20 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 
+	"github.com/araddon/dateparse"
 	"github.com/satori/go.uuid"
 )
+
+// File struct
+type File struct {
+	Path         string
+	Name         string
+	Size         int64
+	ModTime      time.Time
+	ModTimestamp int64
+}
 
 // InArray check if value is on array
 func InArray(val interface{}, array interface{}) bool {
@@ -38,29 +49,47 @@ func GenerateUUID4() string {
 }
 
 // ListFiles lists all files inside a dir
-func ListFiles(basePath string) []string {
-	var files []string
+func ListFiles(basePath string) ([]File, error) {
+	var files []File
 
 	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
-		if basePath != path && !info.IsDir() {
-			files = append(files, path)
+		if err != nil {
+			return err
 		}
+
+		modifParsed, err := dateparse.ParseLocal(info.ModTime().String())
+
+		if err != nil {
+			return err
+		}
+
+		if basePath != path && !info.IsDir() {
+			files = append(files, File{
+				Path:         path,
+				Name:         info.Name(),
+				Size:         info.Size(),
+				ModTime:      info.ModTime(),
+				ModTimestamp: modifParsed.Unix(),
+			})
+		}
+
 		return nil
 	})
+
 	if err != nil {
-		return files
+		return files, err
 	}
 
-	return files
+	return files, nil
 }
 
 // ReadFile get the file content
-func ReadFile(path string) string {
+func ReadFile(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return string(data)
+	return string(data), nil
 }
 
 // FilterFiles filters files list based on specific sub-strings

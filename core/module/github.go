@@ -214,6 +214,11 @@ func (g *Github) DeleteGist(ctx context.Context, id string) (bool, error) {
 	return true, nil
 }
 
+// Sync sync a directory files with a remote gist
+func (g *Github) Sync(ctx context.Context, directory, gistID string) (bool, error) {
+	return true, nil
+}
+
 // LoadFromJSON update object from json
 func (g *Gist) LoadFromJSON(data []byte) (bool, error) {
 	err := json.Unmarshal(data, &g)
