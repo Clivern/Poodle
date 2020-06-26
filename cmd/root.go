@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Verbose var
 var Verbose bool
 
 var rootCmd = &cobra.Command{

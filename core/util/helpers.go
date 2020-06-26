@@ -20,6 +20,7 @@ import (
 // File struct
 type File struct {
 	Path         string
+	Ident        string
 	Name         string
 	Size         int64
 	ModTime      time.Time
@@ -49,8 +50,9 @@ func GenerateUUID4() string {
 }
 
 // ListFiles lists all files inside a dir
-func ListFiles(basePath string) ([]File, error) {
-	var files []File
+func ListFiles(basePath string) (map[string]File, error) {
+	ident := ""
+	files := make(map[string]File)
 
 	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -64,13 +66,15 @@ func ListFiles(basePath string) ([]File, error) {
 		}
 
 		if basePath != path && !info.IsDir() {
-			files = append(files, File{
+			ident = strings.Replace(path, string(os.PathSeparator), "|", -1)
+			files[ident] = File{
 				Path:         path,
+				Ident:        strings.Replace(path, string(os.PathSeparator), "|", -1),
 				Name:         info.Name(),
 				Size:         info.Size(),
 				ModTime:      info.ModTime(),
 				ModTimestamp: modifParsed.Unix(),
-			})
+			}
 		}
 
 		return nil
