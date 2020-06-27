@@ -7,6 +7,7 @@ package cmd
 import (
 	"fmt"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -14,6 +15,12 @@ var newCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Creates a new API service definition file",
 	Run: func(cmd *cobra.Command, args []string) {
+		if Verbose {
+			log.SetLevel(log.DebugLevel)
+		}
+
+		log.Debug("New command got called.")
+
 		fmt.Println(`WIP`)
 	},
 }

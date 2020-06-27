@@ -11,12 +11,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Verbose var
+var Verbose bool
+
 var rootCmd = &cobra.Command{
 	Use: "poodle",
 	Short: `Work seamlessly with Poodle from the command line.
 
 Poodle is in early stages of development, and we'd love to hear your
 feedback at <https://github.com/Clivern/Poodle>`,
+}
+
+func init() {
+	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 }
 
 // Execute runs cmd tool

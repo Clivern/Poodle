@@ -9,7 +9,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
+
+	"github.com/clivern/poodle/core/util"
+
+	"github.com/araddon/dateparse"
+	log "github.com/sirupsen/logrus"
 )
 
 // GithubAPI github api url
@@ -45,7 +51,14 @@ type Gist struct {
 
 // GistResponse struct
 type GistResponse struct {
-	ID string `json:"id"`
+	ID          string          `json:"id"`
+	Description string          `json:"description"`
+	CreatedAt   string          `json:"created_at"`
+	CreatedTime int64           `json:"created_at_timestamp"`
+	UpdatedAt   string          `json:"updated_at"`
+	UpdatedTime int64           `json:"updated_at_timestamp"`
+	Public      bool            `json:"public"`
+	Files       map[string]File `json:"files"`
 }
 
 // NewGithubClient creates an instance of github client
@@ -209,6 +222,160 @@ func (g *Github) DeleteGist(ctx context.Context, id string) (bool, error) {
 
 	if http.StatusNoContent != g.HTTPClient.GetStatusCode(response) {
 		return false, fmt.Errorf("Invalid status code %d", g.HTTPClient.GetStatusCode(response))
+	}
+
+	return true, nil
+}
+
+// GetSyncStatus checks the sync direction
+// Local changes has more priority that remote changes
+// So if there is a new local file or any file modification date is
+// more than the remote we upload
+func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (string, error) {
+
+	gist, err := g.GetGist(ctx, gistID)
+
+	if err != nil {
+		return "", err
+	}
+
+	log.Debug(fmt.Sprintf("Remote gist CreatedAt %s", gist.CreatedAt))
+
+	createdTime, err := dateparse.ParseLocal(strings.Replace(gist.CreatedAt, "Z", "+00:00", -1))
+
+	if err != nil {
+		return "", err
+	}
+
+	log.Debug(fmt.Sprintf("Remote gist UpdatedAt %s", gist.UpdatedAt))
+
+	updatedTime, err := dateparse.ParseLocal(strings.Replace(gist.UpdatedAt, "Z", "+00:00", -1))
+
+	if err != nil {
+		return "", err
+	}
+
+	gist.CreatedTime = createdTime.Unix()
+	gist.UpdatedTime = updatedTime.Unix()
+
+	localFiles, err := util.ListFiles(directory)
+
+	if err != nil {
+		return "", err
+	}
+
+	for ident, file := range localFiles {
+
+		log.Debug(fmt.Sprintf("File %s has ModTime %s", ident, file.ModTime))
+
+		// if local file not on remote
+		if _, ok := gist.Files[ident]; !ok {
+			return "upload", nil
+		}
+
+		// if local file updated lately
+		if file.ModTimestamp > gist.UpdatedTime {
+			return "upload", nil
+		}
+	}
+
+	for ident := range gist.Files {
+
+		// if remote file not locally
+		if _, ok := localFiles[ident]; !ok {
+			return "download", nil
+		}
+
+		// if remote gist updated lately
+		if gist.UpdatedTime > localFiles[ident].ModTimestamp {
+			return "download", nil
+		}
+	}
+
+	return "in_sync", nil
+}
+
+// SyncByUpload uploads local definitions to github gist
+func (g *Github) SyncByUpload(ctx context.Context, directory, gistID string) (bool, error) {
+
+	gist, err := g.GetGist(ctx, gistID)
+
+	if err != nil {
+		return false, err
+	}
+
+	gist.Files = make(map[string]File)
+
+	localFiles, err := util.ListFiles(directory)
+
+	if err != nil {
+		return false, err
+	}
+
+	content := ""
+
+	for ident, file := range localFiles {
+
+		content, err = util.ReadFile(file.Path)
+
+		if err != nil {
+			return false, err
+		}
+
+		gist.Files[ident] = File{
+			Content:  content,
+			Filename: ident,
+		}
+	}
+
+	log.Debug("Update remote gist from local")
+
+	_, err = g.UpdateGist(ctx, gistID, Gist{
+		Description: gist.Description,
+		Public:      gist.Public,
+		Files:       gist.Files,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// SyncByDownload downloads local definitions from github gist
+func (g *Github) SyncByDownload(ctx context.Context, directory, gistID string) (bool, error) {
+
+	gist, err := g.GetGist(ctx, gistID)
+
+	if err != nil {
+		return false, err
+	}
+
+	// truncate local files
+	err = util.ClearDir(util.RemoveTrailingSlash(directory))
+
+	if err != nil {
+		return false, err
+	}
+
+	path := ""
+
+	log.Debug("Update local from remote gist")
+
+	for ident, file := range gist.Files {
+		// write file & create sub dir if not exist
+		path = fmt.Sprintf(
+			"%s%s",
+			util.EnsureTrailingSlash(directory),
+			strings.Replace(ident, "__", string(os.PathSeparator), -1),
+		)
+
+		err = util.StoreFile(path, file.Content)
+
+		if err != nil {
+			return false, err
+		}
 	}
 
 	return true, nil

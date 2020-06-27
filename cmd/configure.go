@@ -7,6 +7,7 @@ package cmd
 import (
 	"fmt"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -14,6 +15,12 @@ var configureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "Configure Poodle",
 	Run: func(cmd *cobra.Command, args []string) {
+		if Verbose {
+			log.SetLevel(log.DebugLevel)
+		}
+
+		log.Debug("Configure command got called.")
+
 		fmt.Println(`WIP`)
 	},
 }

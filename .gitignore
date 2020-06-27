@@ -15,3 +15,5 @@ config.prod.yml
 
 # dist dir
 dist
+
+sync

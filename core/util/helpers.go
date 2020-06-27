@@ -6,14 +6,27 @@ package util
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 
+	"github.com/araddon/dateparse"
 	"github.com/satori/go.uuid"
 )
+
+// File struct
+type File struct {
+	Path         string
+	Ident        string
+	Name         string
+	Size         int64
+	ModTime      time.Time
+	ModTimestamp int64
+}
 
 // InArray check if value is on array
 func InArray(val interface{}, array interface{}) bool {
@@ -38,29 +51,52 @@ func GenerateUUID4() string {
 }
 
 // ListFiles lists all files inside a dir
-func ListFiles(basePath string) []string {
-	var files []string
+func ListFiles(basePath string) (map[string]File, error) {
+	ident := ""
+	files := make(map[string]File)
+	basePath = RemoveTrailingSlash(basePath)
 
 	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
-		if basePath != path && !info.IsDir() {
-			files = append(files, path)
+		if err != nil {
+			return err
 		}
+
+		modifParsed, err := dateparse.ParseLocal(info.ModTime().String())
+
+		if err != nil {
+			return err
+		}
+
+		if basePath != path && !info.IsDir() {
+			ident = strings.Replace(path, EnsureTrailingSlash(basePath), "", -1)
+			ident = strings.Replace(ident, string(os.PathSeparator), "__", -1)
+			files[ident] = File{
+				Path:         path,
+				Ident:        strings.Replace(path, string(os.PathSeparator), "__", -1),
+				Name:         info.Name(),
+				Size:         info.Size(),
+				ModTime:      info.ModTime(),
+				ModTimestamp: modifParsed.Unix(),
+			}
+		}
+
 		return nil
 	})
+
 	if err != nil {
-		return files
+		return files, err
 	}
 
-	return files
+	return files, nil
 }
 
 // ReadFile get the file content
-func ReadFile(path string) string {
+func ReadFile(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return string(data)
+	return string(data), nil
 }
 
 // FilterFiles filters files list based on specific sub-strings
@@ -95,4 +131,56 @@ func ConvertToJSON(val interface{}) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+// EnsureTrailingSlash ensure there is a trailing slash
+func EnsureTrailingSlash(dir string) string {
+	return fmt.Sprintf(
+		"%s%s",
+		strings.TrimRight(dir, string(os.PathSeparator)),
+		string(os.PathSeparator),
+	)
+}
+
+// RemoveTrailingSlash removes any trailing slash
+func RemoveTrailingSlash(dir string) string {
+	return strings.TrimRight(dir, string(os.PathSeparator))
+}
+
+// ClearDir removes all files and sub dirs
+func ClearDir(dir string) error {
+	files, err := filepath.Glob(filepath.Join(dir, "*"))
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		err = os.RemoveAll(file)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// StoreFile stores a file content
+func StoreFile(path, content string) error {
+	dir := filepath.Dir(path)
+
+	err := os.MkdirAll(dir, 0775)
+
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Create(path)
+
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString(content)
+
+	return err
 }
