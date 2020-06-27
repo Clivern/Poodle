@@ -11,10 +11,10 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/clivern/poodle/core/util"
 
-	"github.com/araddon/dateparse"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -241,7 +241,7 @@ func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (s
 
 	log.Debug(fmt.Sprintf("Remote gist CreatedAt %s", gist.CreatedAt))
 
-	createdTime, err := dateparse.ParseLocal(strings.Replace(gist.CreatedAt, "Z", "+00:00", -1))
+	createdTime, err := time.Parse(time.RFC3339, gist.CreatedAt)
 
 	if err != nil {
 		return "", err
@@ -249,7 +249,7 @@ func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (s
 
 	log.Debug(fmt.Sprintf("Remote gist UpdatedAt %s", gist.UpdatedAt))
 
-	updatedTime, err := dateparse.ParseLocal(strings.Replace(gist.UpdatedAt, "Z", "+00:00", -1))
+	updatedTime, err := time.Parse(time.RFC3339, gist.UpdatedAt)
 
 	if err != nil {
 		return "", err
