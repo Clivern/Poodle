@@ -28,7 +28,7 @@ func main() {
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.WarnLevel)
 	log.SetFormatter(&log.JSONFormatter{})
-	//log.SetFormatter(&log.TextFormatter{})
+	// log.SetFormatter(&log.TextFormatter{})
 
 	cmd.Execute()
 }

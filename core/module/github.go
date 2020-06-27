@@ -9,11 +9,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/clivern/poodle/core/util"
 
 	"github.com/araddon/dateparse"
+	log "github.com/sirupsen/logrus"
 )
 
 // GithubAPI github api url
@@ -237,13 +239,17 @@ func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (s
 		return "", err
 	}
 
-	createdTime, err := dateparse.ParseLocal(gist.CreatedAt)
+	log.Debug(fmt.Sprintf("Remote gist CreatedAt %s", gist.CreatedAt))
+
+	createdTime, err := dateparse.ParseLocal(strings.Replace(gist.CreatedAt, "Z", "+00:00", -1))
 
 	if err != nil {
 		return "", err
 	}
 
-	updatedTime, err := dateparse.ParseLocal(gist.UpdatedAt)
+	log.Debug(fmt.Sprintf("Remote gist UpdatedAt %s", gist.UpdatedAt))
+
+	updatedTime, err := dateparse.ParseLocal(strings.Replace(gist.UpdatedAt, "Z", "+00:00", -1))
 
 	if err != nil {
 		return "", err
@@ -259,6 +265,9 @@ func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (s
 	}
 
 	for ident, file := range localFiles {
+
+		log.Debug(fmt.Sprintf("File %s has ModTime %s", ident, file.ModTime))
+
 		// if local file not on remote
 		if _, ok := gist.Files[ident]; !ok {
 			return "upload", nil
@@ -284,6 +293,92 @@ func (g *Github) GetSyncStatus(ctx context.Context, directory, gistID string) (s
 	}
 
 	return "in_sync", nil
+}
+
+// SyncByUpload uploads local definitions to github gist
+func (g *Github) SyncByUpload(ctx context.Context, directory, gistID string) (bool, error) {
+
+	gist, err := g.GetGist(ctx, gistID)
+
+	if err != nil {
+		return false, err
+	}
+
+	gist.Files = make(map[string]File)
+
+	localFiles, err := util.ListFiles(directory)
+
+	if err != nil {
+		return false, err
+	}
+
+	content := ""
+
+	for ident, file := range localFiles {
+
+		content, err = util.ReadFile(file.Path)
+
+		if err != nil {
+			return false, err
+		}
+
+		gist.Files[ident] = File{
+			Content:  content,
+			Filename: ident,
+		}
+	}
+
+	log.Debug("Update remote gist from local")
+
+	_, err = g.UpdateGist(ctx, gistID, Gist{
+		Description: gist.Description,
+		Public:      gist.Public,
+		Files:       gist.Files,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// SyncByDownload downloads local definitions from github gist
+func (g *Github) SyncByDownload(ctx context.Context, directory, gistID string) (bool, error) {
+
+	gist, err := g.GetGist(ctx, gistID)
+
+	if err != nil {
+		return false, err
+	}
+
+	// truncate local files
+	err = util.ClearDir(util.RemoveTrailingSlash(directory))
+
+	if err != nil {
+		return false, err
+	}
+
+	path := ""
+
+	log.Debug("Update local from remote gist")
+
+	for ident, file := range gist.Files {
+		// write file & create sub dir if not exist
+		path = fmt.Sprintf(
+			"%s%s",
+			util.EnsureTrailingSlash(directory),
+			strings.Replace(ident, "__", string(os.PathSeparator), -1),
+		)
+
+		err = util.StoreFile(path, file.Content)
+
+		if err != nil {
+			return false, err
+		}
+	}
+
+	return true, nil
 }
 
 // LoadFromJSON update object from json
