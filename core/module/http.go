@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 // HTTPClient struct
@@ -39,7 +40,9 @@ func (h *HTTPClient) Get(ctx context.Context, endpoint string, parameters, heade
 		req.Header.Add(k, v)
 	}
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
@@ -67,7 +70,9 @@ func (h *HTTPClient) Post(ctx context.Context, endpoint string, data string, par
 		req.Header.Add(k, v)
 	}
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
@@ -95,7 +100,9 @@ func (h *HTTPClient) Put(ctx context.Context, endpoint string, data string, para
 		req.Header.Add(k, v)
 	}
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
@@ -123,7 +130,9 @@ func (h *HTTPClient) Patch(ctx context.Context, endpoint string, data string, pa
 		req.Header.Add(k, v)
 	}
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
@@ -151,7 +160,9 @@ func (h *HTTPClient) Delete(ctx context.Context, endpoint string, parameters, he
 		req.Header.Add(k, v)
 	}
 
-	client := http.Client{}
+	client := http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
