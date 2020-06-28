@@ -121,8 +121,34 @@ var configureCmd = &cobra.Command{
 			return
 		}
 
-		// override github username
+		// Override github username
 		conf.Gist.Username = username
+
+		token, err := prompt.Input(
+			fmt.Sprintf("Github OAuth Token:"),
+			module.NotEmpty,
+		)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		// Override github token
+		conf.Gist.AccessToken = token
+
+		servicesDir, err := prompt.Input(
+			fmt.Sprintf("Services Definitions Directory:"),
+			module.NotEmpty,
+		)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		// Override services dir
+		conf.Services.Directory = servicesDir
 
 		err = conf.Encode(file)
 
