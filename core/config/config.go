@@ -63,6 +63,23 @@ func (c *Config) Prompt(label string, validate promptui.ValidateFunc) (string, e
 	return result, nil
 }
 
+// Select request a value from a list from end user
+func (c *Config) Select(label string, items []string) (string, error) {
+
+	item := promptui.Select{
+		Label: label,
+		Items: items,
+	}
+
+	_, result, err := item.Run()
+
+	if err != nil {
+		return "", fmt.Errorf("Prompt failed %v\n", err)
+	}
+
+	return result, nil
+}
+
 // UpdateItem updates an item
 func (c *Config) UpdateItem(key, value string) (bool, error) {
 	return true, nil

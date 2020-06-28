@@ -24,6 +24,13 @@ var configureCmd = &cobra.Command{
 		log.Debug("Configure command got called.")
 
 		conf := config.Config{}
+
+		configureWith, err := conf.Select("Configure With:", []string{"Interactive", "Editor"})
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+		}
+
 		githubUsername, err := conf.Prompt("Github Username:", config.NotEmpty)
 
 		if err != nil {
@@ -36,6 +43,7 @@ var configureCmd = &cobra.Command{
 			fmt.Printf("Error: %s", err.Error())
 		}
 
+		fmt.Println(configureWith)
 		fmt.Println(githubUsername)
 		fmt.Println(githubToken)
 		fmt.Println(`WIP`)
