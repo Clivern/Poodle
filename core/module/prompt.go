@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT
 // license that can be found in the LICENSE file.
 
-package config
+package module
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-// Config struct
-type Config struct {
+// Prompt struct
+type Prompt struct {
 }
 
 // NotEmpty returns error if input is empty
@@ -23,23 +23,8 @@ func NotEmpty(input string) error {
 	return nil
 }
 
-// Exists check if file exists
-func (c *Config) Exists() (bool, error) {
-	return true, nil
-}
-
-// Create creates a config file
-func (c *Config) Create() (bool, error) {
-	return true, nil
-}
-
-// IsItemEmpty checks if config item not empty
-func (c *Config) IsItemEmpty(key string) (bool, error) {
-	return true, nil
-}
-
-// Prompt request a value from end user
-func (c *Config) Prompt(label string, validate promptui.ValidateFunc) (string, error) {
+// Input request a value from end user
+func (p *Prompt) Input(label string, validate promptui.ValidateFunc) (string, error) {
 
 	templates := &promptui.PromptTemplates{
 		Prompt:  "{{ . }} ",
@@ -57,14 +42,14 @@ func (c *Config) Prompt(label string, validate promptui.ValidateFunc) (string, e
 	result, err := item.Run()
 
 	if err != nil {
-		return "", fmt.Errorf("Prompt failed %v\n", err)
+		return "", err
 	}
 
 	return result, nil
 }
 
 // Select request a value from a list from end user
-func (c *Config) Select(label string, items []string) (string, error) {
+func (p *Prompt) Select(label string, items []string) (string, error) {
 
 	item := promptui.Select{
 		Label: label,
@@ -74,13 +59,8 @@ func (c *Config) Select(label string, items []string) (string, error) {
 	_, result, err := item.Run()
 
 	if err != nil {
-		return "", fmt.Errorf("Prompt failed %v\n", err)
+		return "", err
 	}
 
 	return result, nil
-}
-
-// UpdateItem updates an item
-func (c *Config) UpdateItem(key, value string) (bool, error) {
-	return true, nil
 }
