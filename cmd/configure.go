@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/clivern/poodle/core/config"
 
@@ -25,22 +26,28 @@ var configureCmd = &cobra.Command{
 
 		conf := config.Config{}
 
-		configureWith, err := conf.Select("Configure With:", []string{"Interactive", "Editor"})
+		configureWith, err := conf.Select(
+			fmt.Sprintf("Configure With"),
+			[]string{"Interactive", fmt.Sprintf("Editor (%s)", os.Getenv("EDITOR"))},
+		)
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
+			return
 		}
 
 		githubUsername, err := conf.Prompt("Github Username:", config.NotEmpty)
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
+			return
 		}
 
 		githubToken, err := conf.Prompt("Github OAuth Token:", config.NotEmpty)
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
+			return
 		}
 
 		fmt.Println(configureWith)
