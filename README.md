@@ -26,6 +26,12 @@ To configure poodle
 $ ./poodle configure
 ```
 
+To sync definitions with backend. for now only github gists supported
+
+```
+$ ./poodle sync
+```
+
 To list all commands
 
 ```zsh
