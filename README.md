@@ -17,7 +17,7 @@
 Download [the latest poodle binary.](https://github.com/Clivern/Poodle/releases)
 
 ```zsh
-$ curl -sL https://github.com/Clivern/Poodle/releases/download/vx.x.x/poodle_x.x.x_OS.tar.gz | tar xz
+$ curl -sL https://github.com/Clivern/Poodle/releases/download/x.x.x/poodle_x.x.x_OS.tar.gz | tar xz
 ```
 
 To configure poodle
