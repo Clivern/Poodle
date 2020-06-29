@@ -34,6 +34,32 @@ To list all commands and options
 
 ```zsh
 $ ./poodle help
+
+Work seamlessly with Poodle from the command line.
+
+Poodle is in early stages of development, and we'd love to hear your
+feedback at <https://github.com/Clivern/Poodle>
+
+Usage:
+  poodle [command]
+
+Available Commands:
+  call        Interact with one of the configured API services
+  configure   Configure Poodle
+  edit        Edit API service definition file
+  help        Help about any command
+  license     Print the license
+  new         Creates a new API service definition file
+  search      Search API services
+  sync        Sync API services definitions
+  version     Print the version number
+
+Flags:
+  -c, --config string   config file (default "/Users/Clivern/poodle/config.toml")
+  -h, --help            help for poodle
+  -v, --verbose         verbose output
+
+Use "poodle [command] --help" for more information about a command.
 ```
 
 To configure poodle
