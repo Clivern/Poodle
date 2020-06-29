@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var startCmd = &cobra.Command{
-	Use:   "start",
+var callCmd = &cobra.Command{
+	Use:   "call",
 	Short: "Interact with one of the configured API services",
 	Run: func(cmd *cobra.Command, args []string) {
 		if Verbose {
@@ -26,5 +26,5 @@ var startCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(callCmd)
 }
