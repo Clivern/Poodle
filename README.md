@@ -11,6 +11,15 @@
 </p>
 <br/>
 
+Poodle is an interactive command line tool to build and test APIs based on a pre-built definitions.
+
+`Poodle` has the following features:
+
+- Register your services and endpoints easily.
+- Use variables in endpoints definitions.
+- Search services/endpoints interactively.
+- Edit services/endpoints easily (config is just a TOML file).
+- Sync services via Gist automatically.
 
 ## Documentation
 
