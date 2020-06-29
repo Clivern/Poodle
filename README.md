@@ -5,7 +5,7 @@
     <p align="center">
         <a href="https://travis-ci.com/Clivern/Poodle"><img src="https://travis-ci.com/Clivern/Poodle.svg?branch=master"></a>
         <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-v0.0.1-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/clivern/Poodle?v=0.0.1"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.0.1"></a>
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
