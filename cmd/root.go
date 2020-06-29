@@ -14,6 +14,9 @@ import (
 // Verbose var
 var Verbose bool
 
+// ConfigFilePath var
+const ConfigFilePath = "poodle/config.toml"
+
 var rootCmd = &cobra.Command{
 	Use: "poodle",
 	Short: `Work seamlessly with Poodle from the command line.

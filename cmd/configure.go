@@ -5,6 +5,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -31,7 +32,7 @@ var configureCmd = &cobra.Command{
 		file := fmt.Sprintf(
 			"%s%s",
 			util.EnsureTrailingSlash(os.Getenv("HOME")),
-			"poodle/config.toml",
+			ConfigFilePath,
 		)
 
 		log.WithFields(log.Fields{
@@ -148,7 +149,41 @@ var configureCmd = &cobra.Command{
 		}
 
 		// Override services dir
-		conf.Services.Directory = servicesDir
+		conf.Services.Directory = util.RemoveTrailingSlash(servicesDir)
+
+		if !util.DirExists(conf.Services.Directory) {
+			fmt.Printf(
+				"Unable to locate services definitions directory [%s]",
+				conf.Services.Directory,
+			)
+			return
+		}
+
+		githubClient := module.NewGithubClient(
+			module.NewHTTPClient(),
+			module.GithubAPI,
+			conf.Gist.Username,
+			conf.Gist.AccessToken,
+		)
+
+		oauth, err := githubClient.Check(context.TODO())
+
+		if err != nil {
+			fmt.Printf(
+				"Error during github authentication for username %s: %s",
+				conf.Gist.Username,
+				err.Error(),
+			)
+			return
+		}
+
+		if !oauth.Valid {
+			fmt.Printf(
+				"Invalid github username, token or scopes [%s] don't include gist",
+				oauth.Scopes,
+			)
+			return
+		}
 
 		err = conf.Encode(file)
 
