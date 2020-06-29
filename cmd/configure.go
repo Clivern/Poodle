@@ -29,51 +29,45 @@ var configureCmd = &cobra.Command{
 
 		log.Debug("Configure command got called.")
 
-		file := fmt.Sprintf(
-			"%s%s",
-			util.EnsureTrailingSlash(os.Getenv("HOME")),
-			ConfigFilePath,
-		)
-
 		log.WithFields(log.Fields{
-			"file": file,
+			"file": Config,
 		}).Debug("Create config file if not exists.")
 
-		if !util.FileExists(file) {
+		if !util.FileExists(Config) {
 			log.WithFields(log.Fields{
-				"file": file,
+				"file": Config,
 			}).Debug("Creating config file")
 
-			err = util.StoreFile(file, "")
+			err = util.StoreFile(Config, "")
 		}
 
 		if err != nil {
 			fmt.Printf(
 				"Error while creating file %s: %s",
-				file,
+				Config,
 				err.Error(),
 			)
 			return
 		}
 
 		conf := model.NewConfigs()
-		err = conf.Decode(file)
+		err = conf.Decode(Config)
 
 		if err != nil {
 			fmt.Printf(
 				"Error while decoding configs %s: %s",
-				file,
+				Config,
 				err.Error(),
 			)
 			return
 		}
 
-		err = conf.Encode(file)
+		err = conf.Encode(Config)
 
 		if err != nil {
 			fmt.Printf(
 				"Error while encoding configs %s: %s",
-				file,
+				Config,
 				err.Error(),
 			)
 			return
@@ -99,12 +93,12 @@ var configureCmd = &cobra.Command{
 
 		if confWith != "Interactive" {
 			editor := module.Editor{}
-			err = editor.Edit(file)
+			err = editor.Edit(Config)
 			if err != nil {
 				fmt.Printf("Error: %s", err.Error())
 			} else {
 				log.WithFields(log.Fields{
-					"file": file,
+					"file": Config,
 				}).Debug("Configs Updated")
 
 				fmt.Println("Configs Updated")
@@ -185,19 +179,19 @@ var configureCmd = &cobra.Command{
 			return
 		}
 
-		err = conf.Encode(file)
+		err = conf.Encode(Config)
 
 		if err != nil {
 			fmt.Printf(
 				"Error while encoding configs %s: %s",
-				file,
+				Config,
 				err.Error(),
 			)
 			return
 		}
 
 		log.WithFields(log.Fields{
-			"file": file,
+			"file": Config,
 		}).Debug("Configs Updated")
 
 		fmt.Println("Configs Updated")

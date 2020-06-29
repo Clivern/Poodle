@@ -8,11 +8,16 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/clivern/poodle/core/util"
+
 	"github.com/spf13/cobra"
 )
 
 // Verbose var
 var Verbose bool
+
+// Config var
+var Config string
 
 // ConfigFilePath var
 const ConfigFilePath = "poodle/config.toml"
@@ -27,6 +32,13 @@ feedback at <https://github.com/Clivern/Poodle>`,
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringVarP(
+		&Config,
+		"config",
+		"c",
+		fmt.Sprintf("%s%s", util.EnsureTrailingSlash(os.Getenv("HOME")), ConfigFilePath),
+		"config file",
+	)
 }
 
 // Execute runs cmd tool

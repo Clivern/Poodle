@@ -7,7 +7,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"strings"
 	"time"
 
@@ -37,27 +36,21 @@ var syncCmd = &cobra.Command{
 
 		log.Debug("Sync command got called.")
 
-		file := fmt.Sprintf(
-			"%s%s",
-			util.EnsureTrailingSlash(os.Getenv("HOME")),
-			ConfigFilePath,
-		)
-
-		if !util.FileExists(file) {
+		if !util.FileExists(Config) {
 			fmt.Printf(
 				"Config file is missing %s, Please start with $ poodle configure",
-				file,
+				Config,
 			)
 			return
 		}
 
 		conf := model.NewConfigs()
-		err = conf.Decode(file)
+		err = conf.Decode(Config)
 
 		if err != nil {
 			fmt.Printf(
 				"Error while decoding configs %s: %s",
-				file,
+				Config,
 				err.Error(),
 			)
 			return
@@ -124,12 +117,12 @@ var syncCmd = &cobra.Command{
 
 			conf.Gist.GistID = result.ID
 
-			err = conf.Encode(file)
+			err = conf.Encode(Config)
 
 			if err != nil {
 				fmt.Printf(
 					"Error while encoding configs %s: %s",
-					file,
+					Config,
 					err.Error(),
 				)
 				return

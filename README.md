@@ -11,14 +11,15 @@
 </p>
 <br/>
 
-Poodle is an interactive command line tool to build and test APIs based on a pre-built definitions.
+Poodle is an interactive command line tool to build and test web APIs based on a pre-built definitions.
 
 `Poodle` has the following features:
 
-- Register your services and endpoints easily.
+- Register your web services and endpoints easily.
 - Use variables in endpoints definitions.
-- Search services/endpoints interactively.
-- Edit services/endpoints easily (config is just a TOML file).
+- Painless debugging and interaction with APIs.
+- Search web services and endpoints interactively.
+- Edit services and endpoints easily (config is just a TOML file).
 - Sync services via Gist automatically.
 
 ## Documentation
@@ -27,6 +28,12 @@ Download [the latest poodle binary.](https://github.com/Clivern/Poodle/releases)
 
 ```zsh
 $ curl -sL https://github.com/Clivern/Poodle/releases/download/x.x.x/poodle_x.x.x_OS.tar.gz | tar xz
+```
+
+To list all commands and options
+
+```zsh
+$ ./poodle help
 ```
 
 To configure poodle
@@ -39,12 +46,6 @@ To sync definitions with backend. for now only github gists supported
 
 ```
 $ ./poodle sync
-```
-
-To list all commands
-
-```zsh
-$ ./poodle help
 ```
 
 
