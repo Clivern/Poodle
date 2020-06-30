@@ -30,7 +30,7 @@ var syncCmd = &cobra.Command{
 			log.SetLevel(log.DebugLevel)
 		}
 
-		spin := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+		spin := spinner.New(spinner.CharSets[26], 100*time.Millisecond)
 		spin.Color("green")
 		spin.Start()
 
