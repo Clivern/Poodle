@@ -34,7 +34,7 @@
     uri = "/item"
     body = """
     {
-        "name": "{$name}"
+        "name": "{$name}",
         "type": "{$type:default}"
     }
     """

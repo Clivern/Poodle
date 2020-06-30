@@ -65,8 +65,97 @@ type Service struct {
 }
 
 // NewService creates an instance of Service
-func NewService() *Service {
-	return &Service{}
+func NewService(id string) *Service {
+	return &Service{
+		Main: Main{
+			ID:          id,
+			Timeout:     "30s",
+			Name:        "~~ name Here ~~",
+			Description: "~~ description Here ~~",
+			ServiceURL:  "http://api.example.com",
+			Headers: [][]string{
+				[]string{"Content-Type", "application/json"},
+			},
+		},
+		Security: Security{
+			Scheme: "none",
+			Basic: Basic{
+				Username: "~~ username here ~~",
+				Password: "~~ password here ~~",
+				Header: []string{
+					"Authorization",
+					"base64({$username}:{$password})",
+				},
+			},
+			APIKey: APIKey{
+				Header: []string{
+					"X-API-KEY",
+					"~~ secret goes here ~~",
+				},
+			},
+			Bearer: Bearer{
+				Header: []string{
+					"Authorization",
+					"Bearer {$token}",
+				},
+			},
+		},
+		Endpoint: []Endpoint{
+			Endpoint{
+				ID:          "CreateItem",
+				Name:        "Create an item",
+				Description: "",
+				Method:      "post",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "/item/{$id}",
+				Body:        `{"name":"{$name}","type":"{$type:default}"}`,
+			},
+			Endpoint{
+				ID:          "GetItems",
+				Name:        "Get a list of items",
+				Description: "",
+				Method:      "get",
+				Headers:     [][]string{},
+				Parameters: [][]string{
+					[]string{"limit", "{$limit:100}"},
+					[]string{"offset", "{$offset:0}"},
+				},
+				URI:  "/item",
+				Body: "",
+			},
+			Endpoint{
+				ID:          "GetItem",
+				Name:        "Get an items",
+				Description: "",
+				Method:      "get",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "/item/{$id}",
+				Body:        "",
+			},
+			Endpoint{
+				ID:          "UpdateItem",
+				Name:        "Update an item",
+				Description: "",
+				Method:      "put",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "/item/{$id}",
+				Body:        `{"name":"{$name}","type":"{$type:default}"}`,
+			},
+			Endpoint{
+				ID:          "DeleteItem",
+				Name:        "Delete an item",
+				Description: "",
+				Method:      "delete",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "/item/{$id}",
+				Body:        "",
+			},
+		},
+	}
 }
 
 // Decode decodes from file to struct
