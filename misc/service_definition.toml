@@ -1,6 +1,6 @@
 # API Service Definition Example
 
-[General]
+[Main]
     id = "clivern_poodle"
     name = "clivern - poodle"
     description = ""
@@ -24,59 +24,62 @@
     [Security.Bearer]
         header = ["Authorization", "Bearer {$token}"]
 
-[Endpoint]
+[[Endpoint]]
+    id = "CreateItem"
+    name = "Create an item"
+    description = ""
+    method = "post"
+    headers = []
+    parameters = []
+    uri = "/item"
+    body = """
+    {
+        "name": "{$name}"
+        "type": "{$type:default}"
+    }
+    """
 
-    [Endpoint.item_create]
-        name = "Create an item"
-        description = ""
-        method = "post"
-        headers = []
-        parameters = []
-        uri = "/item"
-        body = """
-        {
-            "name": "{$name}"
-            "type": "{$type:default}"
-        }
-        """
+[[Endpoint]]
+    id = "GetItems"
+    name = "Get a list of items"
+    description = ""
+    method = "get"
+    headers = []
+    parameters = [ ["limit", "{$limit:100}"], ["offset", "{$offset:0}"] ]
+    uri = "/item"
+    body = ""
 
-    [Endpoint.item_list]
-        name = "Get a list of items"
-        description = ""
-        method = "get"
-        headers = []
-        parameters = [ ["limit", "{$limit:100}"], ["offset", "{$offset:0}"] ]
-        uri = "/item"
-        body = ""
+[[Endpoint]]
+    id = "GetItem"
+    name = "Get an item"
+    description = ""
+    method = "get"
+    headers = []
+    parameters = []
+    uri = "/item/{$id}"
+    body = ""
 
-    [Endpoint.item_get]
-        name = "Get an item"
-        description = ""
-        method = "get"
-        headers = []
-        parameters = []
-        uri = "/item/{$id}"
-        body = ""
+[[Endpoint]]
+    id = "DeleteItem"
+    name = "Delete an item"
+    description = ""
+    method = "delete"
+    headers = []
+    parameters = []
+    uri = "/item/{$id}"
+    body = ""
 
-    [Endpoint.item_delete]
-        name = "Delete an item"
-        description = ""
-        method = "delete"
-        headers = []
-        parameters = []
-        uri = "/item/{$id}"
-        body = ""
-
-    [Endpoint.item_update]
-        name = "Update an item"
-        description = ""
-        method = "put"
-        headers = []
-        parameters = []
-        uri = "/item/{$id}"
-        body = """
-        {
-            "name": "{$name}",
-            "type": "{$type:default}"
-        }
-        """
+[[Endpoint]]
+    id = "UpdateItem"
+    name = "Update an item"
+    description = ""
+    method = "put"
+    headers = []
+    parameters = []
+    uri = "/item/{$id}"
+    body = """
+    {
+        "name": "{$name}",
+        "type": "{$type:default}"
+    }
+    """
