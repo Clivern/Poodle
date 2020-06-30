@@ -6,6 +6,11 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/clivern/poodle/core/model"
+	"github.com/clivern/poodle/core/module"
+	"github.com/clivern/poodle/core/util"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -13,15 +18,88 @@ import (
 
 var editCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "Edit API service definition file",
+	Short: "Edit service definition file",
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
+
 		if Verbose {
 			log.SetLevel(log.DebugLevel)
 		}
 
-		log.Debug("New command got called.")
+		log.Debug("Edit command got called.")
 
-		fmt.Println(`WIP`)
+		if !util.FileExists(Config) {
+			fmt.Printf(
+				"Config file is missing %s, Please start with $ poodle configure",
+				Config,
+			)
+			return
+		}
+
+		conf := model.NewConfigs()
+		err = conf.Decode(Config)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while decoding configs %s: %s",
+				Config,
+				err.Error(),
+			)
+			return
+		}
+
+		prompt := module.Prompt{}
+
+		localFiles, err := util.ListFiles(util.EnsureTrailingSlash(conf.Services.Directory))
+
+		if err != nil {
+			fmt.Printf(
+				"Error while listing local files in %s: %s",
+				util.EnsureTrailingSlash(conf.Services.Directory),
+				err.Error(),
+			)
+			return
+		}
+
+		files := []string{}
+
+		for _, file := range localFiles {
+			if !strings.Contains(file.Name, ".toml") {
+				continue
+			}
+
+			files = append(files, strings.Replace(file.Name, ".toml", "", -1))
+		}
+
+		relPath, err := prompt.Select(
+			fmt.Sprintf("Select a Service"),
+			files,
+		)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		absPath := fmt.Sprintf(
+			"%s%s.toml",
+			util.EnsureTrailingSlash(conf.Services.Directory),
+			relPath,
+		)
+
+		editor := module.Editor{}
+		err = editor.Edit(absPath)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		log.WithFields(log.Fields{
+			"file": absPath,
+		}).Debug("Service file updated")
+
+		fmt.Println("Service file updated")
 	},
 }
 
