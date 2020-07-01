@@ -21,7 +21,7 @@ import (
 
 var syncCmd = &cobra.Command{
 	Use:   "sync",
-	Short: "Sync API services definitions",
+	Short: "Sync services definitions",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		var ok bool

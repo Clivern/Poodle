@@ -44,14 +44,13 @@ Usage:
   poodle [command]
 
 Available Commands:
-  call        Interact with one of the configured API services
+  call        Interact with one of the configured services
   configure   Configure Poodle
-  edit        Edit API service definition file
+  edit        Edit service definition file
   help        Help about any command
   license     Print the license
-  new         Creates a new API service definition file
-  search      Search API services
-  sync        Sync API services definitions
+  new         Creates a new service definition file
+  sync        Sync services definitions
   version     Print the version number
 
 Flags:

@@ -15,7 +15,7 @@ import (
 
 var callCmd = &cobra.Command{
 	Use:   "call",
-	Short: "Interact with one of the configured API services",
+	Short: "Interact with one of the configured services",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 
