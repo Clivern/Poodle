@@ -49,6 +49,7 @@ var editCmd = &cobra.Command{
 		}
 
 		prompt := module.Prompt{}
+		finder := module.FuzzyFinder{}
 
 		localFiles, err := util.ListFiles(util.EnsureTrailingSlash(conf.Services.Directory))
 
@@ -71,10 +72,16 @@ var editCmd = &cobra.Command{
 			files = append(files, strings.Replace(file.Name, ".toml", "", -1))
 		}
 
-		relPath, err := prompt.Select(
-			fmt.Sprintf("Select a Service"),
-			files,
-		)
+		relPath := ""
+
+		if finder.Available() {
+			relPath, err = finder.Show(files)
+		} else {
+			relPath, err = prompt.Select(
+				fmt.Sprintf("Select a Service"),
+				files,
+			)
+		}
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
