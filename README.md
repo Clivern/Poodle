@@ -24,7 +24,7 @@ Poodle is an interactive command line tool to build and test web APIs based on a
 
 ## Documentation
 
-Download [the latest poodle binary.](https://github.com/Clivern/Poodle/releases)
+Download [the latest poodle binary](https://github.com/Clivern/Poodle/releases). Also install [fzf](https://github.com/junegunn/fzf) for better searching otherwise poodle will use a built-in one.
 
 ```zsh
 $ curl -sL https://github.com/Clivern/Poodle/releases/download/x.x.x/poodle_x.x.x_OS.tar.gz | tar xz
