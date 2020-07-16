@@ -109,6 +109,18 @@ var callCmd = &cobra.Command{
 
 		fmt.Println(result)
 		fmt.Println(index[result])
+
+		// @TODO
+		// Collect vars needed
+
+		// @TODO
+		// Prompt to collect these vars from end user
+
+		// @TODO
+		// Do the http calls
+
+		// @TODO
+		// Show response
 	},
 }
 
