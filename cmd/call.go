@@ -6,8 +6,11 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
+	"github.com/clivern/poodle/core/model"
 	"github.com/clivern/poodle/core/module"
+	"github.com/clivern/poodle/core/util"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -25,22 +28,70 @@ var callCmd = &cobra.Command{
 
 		log.Debug("Call command got called.")
 
-		finder := module.FuzzyFinder{}
-		prompt := module.Prompt{}
+		if !util.FileExists(Config) {
+			fmt.Printf(
+				"Config file is missing %s, Please start with $ poodle configure",
+				Config,
+			)
+			return
+		}
 
-		data := []string{
-			"A",
-			"B",
-			"C",
-			"D",
-			"E",
-			"F",
-			"G",
-			"H",
-			"I",
+		conf := model.NewConfigs()
+		err = conf.Decode(Config)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while decoding configs %s: %s",
+				Config,
+				err.Error(),
+			)
+			return
+		}
+
+		files, err := util.ListFiles(util.EnsureTrailingSlash(conf.Services.Directory))
+
+		if err != nil {
+			fmt.Printf(
+				"Error while listing services under %s: %s",
+				util.EnsureTrailingSlash(conf.Services.Directory),
+				err.Error(),
+			)
+			return
+		}
+
+		data := []string{}
+		index := map[string]*model.Service{}
+		service := &model.Service{}
+
+		for _, v := range files {
+			if strings.Contains(v.Name, ".toml") {
+
+				service = model.NewService(v.Name)
+				err = service.Decode(v.Path)
+
+				if err != nil {
+					fmt.Printf(
+						"Error while decoding service %s: %s",
+						v.Path,
+						err.Error(),
+					)
+					return
+				}
+
+				for _, end := range service.Endpoint {
+					data = append(
+						data,
+						fmt.Sprintf("%s - %s", service.Main.ID, end.ID),
+					)
+
+					index[fmt.Sprintf("%s - %s", service.Main.ID, end.ID)] = service
+				}
+			}
 		}
 
 		result := ""
+		finder := module.FuzzyFinder{}
+		prompt := module.Prompt{}
 
 		if finder.Available() {
 			result, err = finder.Show(data)
@@ -57,6 +108,7 @@ var callCmd = &cobra.Command{
 		}
 
 		fmt.Println(result)
+		fmt.Println(index[result])
 	},
 }
 
