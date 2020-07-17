@@ -5,11 +5,14 @@
 package module
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 
 	"github.com/clivern/poodle/core/model"
+	"github.com/clivern/poodle/core/util"
 )
 
 // Caller struct
@@ -83,7 +86,7 @@ func (c *Caller) ParseFields(data string) map[string]Field {
 			}
 		} else {
 			fields[item] = Field{
-				Prompt:     fmt.Sprintf(`$%s (default=''):`, item),
+				Prompt:     fmt.Sprintf(`$%s* (default=''):`, item),
 				IsOptional: false,
 				Default:    "",
 			}
@@ -102,9 +105,119 @@ func (c *Caller) MergeFields(m1, m2 map[string]Field) map[string]Field {
 }
 
 // Call calls the remote service
-func (c *Caller) Call(endpointID string, service *model.Service, fields map[string]Field) string {
-	fmt.Println(endpointID)
-	fmt.Println(fields)
+func (c *Caller) Call(endpointID string, service *model.Service, fields map[string]Field) (string, error) {
+	var response *http.Response
+	var err error
 
-	return ""
+	for _, end := range service.Endpoint {
+		if fmt.Sprintf("%s - %s", service.Main.ID, end.ID) != endpointID {
+			continue
+		}
+
+		url := fmt.Sprintf(
+			"%s%s",
+			util.EnsureTrailingSlash(service.Main.ServiceURL),
+			util.RemoveStartingSlash(c.ReplaceVars(end.URI, fields)),
+		)
+
+		data := c.ReplaceVars(end.Body, fields)
+		parameters := make(map[string]string)
+		headers := make(map[string]string)
+
+		// Get headers vars
+		for _, header := range end.Headers {
+			headers[header[0]] = c.ReplaceVars(header[1], fields)
+		}
+
+		// Get parameters vars
+		for _, parameter := range end.Parameters {
+			parameters[parameter[0]] = c.ReplaceVars(parameter[1], fields)
+		}
+
+		if end.Method == "get" {
+			response, err = c.HTTPClient.Get(
+				context.TODO(),
+				url,
+				parameters,
+				headers,
+			)
+		}
+
+		if end.Method == "post" {
+			response, err = c.HTTPClient.Post(
+				context.TODO(),
+				url,
+				data,
+				parameters,
+				headers,
+			)
+		}
+
+		if end.Method == "put" {
+			response, err = c.HTTPClient.Put(
+				context.TODO(),
+				url,
+				data,
+				parameters,
+				headers,
+			)
+		}
+
+		if end.Method == "delete" {
+			response, err = c.HTTPClient.Delete(
+				context.TODO(),
+				url,
+				parameters,
+				headers,
+			)
+		}
+
+		if end.Method == "patch" {
+			response, err = c.HTTPClient.Patch(
+				context.TODO(),
+				url,
+				data,
+				parameters,
+				headers,
+			)
+		}
+	}
+
+	if err != nil {
+		return "", err
+	}
+
+	responseCode := c.HTTPClient.GetStatusCode(response)
+
+	body, err := c.HTTPClient.ToString(response)
+
+	if err != nil {
+		return "", err
+	}
+
+	// @TODO make it pretty
+	return fmt.Sprintf("Response Code: %d\nResponse Body: %s", responseCode, body), nil
+}
+
+// ReplaceVars replaces vars
+func (c *Caller) ReplaceVars(data string, fields map[string]Field) string {
+	for k, field := range fields {
+		if field.IsOptional {
+			data = strings.Replace(
+				data,
+				fmt.Sprintf("{$%s:%s}", k, field.Default),
+				field.Value,
+				-1,
+			)
+		} else {
+			data = strings.Replace(
+				data,
+				fmt.Sprintf("{$%s}", k),
+				field.Value,
+				-1,
+			)
+		}
+	}
+
+	return data
 }

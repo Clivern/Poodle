@@ -143,7 +143,13 @@ var callCmd = &cobra.Command{
 			}
 		}
 
-		response := caller.Call(result, index[result], fields)
+		response, err := caller.Call(result, index[result], fields)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
 		fmt.Println(response)
 	},
 }

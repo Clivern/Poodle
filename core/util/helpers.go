@@ -147,6 +147,11 @@ func RemoveTrailingSlash(dir string) string {
 	return strings.TrimRight(dir, string(os.PathSeparator))
 }
 
+// RemoveStartingSlash removes any starting slash
+func RemoveStartingSlash(dir string) string {
+	return strings.TrimLeft(dir, string(os.PathSeparator))
+}
+
 // ClearDir removes all files and sub dirs
 func ClearDir(dir string) error {
 	files, err := filepath.Glob(filepath.Join(dir, "*"))
