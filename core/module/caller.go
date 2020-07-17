@@ -41,7 +41,21 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 		if fmt.Sprintf("%s - %s", service.Main.ID, end.ID) != endpointID {
 			continue
 		}
+
+		// Get URI vars
 		fields = c.MergeFields(fields, c.ParseFields(end.URI))
+
+		// Get headers vars
+		for _, header := range end.Headers {
+			fields = c.MergeFields(fields, c.ParseFields(header[1]))
+		}
+
+		// Get parameters vars
+		for _, parameter := range end.Parameters {
+			fields = c.MergeFields(fields, c.ParseFields(parameter[1]))
+		}
+
+		// Get Body vars
 		fields = c.MergeFields(fields, c.ParseFields(end.Body))
 	}
 
