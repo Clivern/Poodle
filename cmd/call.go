@@ -7,11 +7,13 @@ package cmd
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/clivern/poodle/core/model"
 	"github.com/clivern/poodle/core/module"
 	"github.com/clivern/poodle/core/util"
 
+	"github.com/briandowns/spinner"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -143,7 +145,13 @@ var callCmd = &cobra.Command{
 			}
 		}
 
+		spin := spinner.New(spinner.CharSets[26], 100*time.Millisecond)
+		spin.Color("green")
+		spin.Start()
+
 		response, err := caller.Call(result, index[result], fields)
+
+		spin.Stop()
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())

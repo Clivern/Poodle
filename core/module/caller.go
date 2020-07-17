@@ -13,6 +13,7 @@ import (
 
 	"github.com/clivern/poodle/core/model"
 	"github.com/clivern/poodle/core/util"
+	. "github.com/logrusorgru/aurora"
 )
 
 // Caller struct
@@ -188,15 +189,15 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 	}
 
 	responseCode := c.HTTPClient.GetStatusCode(response)
-
 	body, err := c.HTTPClient.ToString(response)
 
 	if err != nil {
 		return "", err
 	}
 
-	// @TODO make it pretty
-	return fmt.Sprintf("Response Code: %d\nResponse Body: %s", responseCode, body), nil
+	proto := response.Proto
+
+	return c.Pretty(proto, responseCode, response.Header, body), nil
 }
 
 // ReplaceVars replaces vars
@@ -220,4 +221,26 @@ func (c *Caller) ReplaceVars(data string, fields map[string]Field) string {
 	}
 
 	return data
+}
+
+// Pretty returns colored output
+func (c *Caller) Pretty(proto string, responseCode int, headers map[string][]string, body string) string {
+	value := "\n---\n"
+
+	value = value + fmt.Sprintf(
+		"%s %d %s\n",
+		Blue(proto),
+		Blue(responseCode),
+		Cyan(http.StatusText(responseCode)),
+	)
+
+	for k, v := range headers {
+		for _, h := range v {
+			value = value + fmt.Sprintf("%s: %s\n", Cyan(k), h)
+		}
+	}
+
+	value = value + fmt.Sprintf("%s", Yellow(body))
+
+	return value
 }
