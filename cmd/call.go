@@ -107,20 +107,44 @@ var callCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println(result)
-		fmt.Println(index[result])
+		caller := module.NewCaller(module.NewHTTPClient())
+		fields := caller.GetFields(result, index[result])
 
-		// @TODO
-		// Collect vars needed
+		val := ""
 
-		// @TODO
-		// Prompt to collect these vars from end user
+		for key, field := range fields {
+			if field.IsOptional {
+				val, err = prompt.Input(
+					field.Prompt,
+					module.Optional,
+				)
 
-		// @TODO
-		// Do the http calls
+				if module.IsEmpty(val) {
+					val = fields[key].Default
+				}
 
-		// @TODO
-		// Show response
+			} else {
+				val, err = prompt.Input(
+					field.Prompt,
+					module.NotEmpty,
+				)
+			}
+
+			if err != nil {
+				fmt.Printf("Error: %s", err.Error())
+				return
+			}
+
+			fields[key] = module.Field{
+				Prompt:     field.Prompt,
+				IsOptional: field.IsOptional,
+				Default:    field.Default,
+				Value:      val,
+			}
+		}
+
+		response := caller.Call(result, index[result], fields)
+		fmt.Println(response)
 	},
 }
 

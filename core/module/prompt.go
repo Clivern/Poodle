@@ -23,6 +23,19 @@ func NotEmpty(input string) error {
 	return nil
 }
 
+// Optional optional value
+func Optional(_ string) error {
+	return nil
+}
+
+// IsEmpty if field is empty
+func IsEmpty(input string) bool {
+	if strings.TrimSpace(input) == "" {
+		return true
+	}
+	return false
+}
+
 // Input request a value from end user
 func (p *Prompt) Input(label string, validate promptui.ValidateFunc) (string, error) {
 
