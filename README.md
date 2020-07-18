@@ -1,5 +1,7 @@
 <p align="center">
-    <img src="/assets/gopher1.png" width="180" />
+    <a href="https://youtu.be/PifMSY8-PO4" target="_blank">
+      <img src="/assets/gopher1.png" width="180" />
+    </a>
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
@@ -9,6 +11,10 @@
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
+<br/>
+<h4 align="center">
+    <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the Demo!</a>
+</h4>
 <br/>
 
 Poodle is an interactive command line tool to build and test web APIs based on a pre-built definitions.
@@ -24,7 +30,7 @@ Poodle is an interactive command line tool to build and test web APIs based on a
 
 ## Documentation
 
-Download [the latest poodle binary](https://github.com/Clivern/Poodle/releases). Also install [fzf](https://github.com/junegunn/fzf) for better searching otherwise poodle will use a built-in one.
+Download [the latest poodle binary](https://github.com/Clivern/Poodle/releases). Also install [fzf](https://github.com/junegunn/fzf) for better searching otherwise poodle will use a built-in one. Make it executable from everywhere.
 
 ```zsh
 $ curl -sL https://github.com/Clivern/Poodle/releases/download/x.x.x/poodle_x.x.x_OS.tar.gz | tar xz
@@ -33,7 +39,7 @@ $ curl -sL https://github.com/Clivern/Poodle/releases/download/x.x.x/poodle_x.x.
 To list all commands and options
 
 ```zsh
-$ ./poodle help
+$ poodle help
 
 Work seamlessly with Poodle from the command line.
 
@@ -61,16 +67,36 @@ Flags:
 Use "poodle [command] --help" for more information about a command.
 ```
 
-To configure poodle
+To configure poodle, You will need to provide your github username and oauth token with a `gist` scope if you need the backup/sync feature
 
 ```zsh
-$ ./poodle configure
+$ poodle configure
 ```
 
 To sync definitions with backend. for now only github gists supported
 
+```zsh
+$ poodle sync
 ```
-$ ./poodle sync
+
+To create a new service.
+
+```zsh
+$ poodle new
+```
+
+by default we use `https://httpbin.org` as service API for testing so change with your web service API.
+
+To edit a previously created service file:
+ 
+```zsh
+$ poodle edit
+```
+
+To start calling your services endpoints:
+
+```
+$ poodle call
 ```
 
 
