@@ -72,7 +72,7 @@ func NewService(id string) *Service {
 			Timeout:     "30s",
 			Name:        "~~ name Here ~~",
 			Description: "~~ description Here ~~",
-			ServiceURL:  "http://api.example.com",
+			ServiceURL:  "https://httpbin.org",
 			Headers: [][]string{
 				[]string{"Content-Type", "application/json"},
 			},
@@ -108,7 +108,7 @@ func NewService(id string) *Service {
 				Method:      "post",
 				Headers:     [][]string{},
 				Parameters:  [][]string{},
-				URI:         "/item/{$id}",
+				URI:         "/anything/{$id}",
 				Body:        `{"name":"{$name}","type":"{$type:default}"}`,
 			},
 			Endpoint{
@@ -121,7 +121,7 @@ func NewService(id string) *Service {
 					[]string{"limit", "{$limit:100}"},
 					[]string{"offset", "{$offset:0}"},
 				},
-				URI:  "/item",
+				URI:  "/anything",
 				Body: "",
 			},
 			Endpoint{
@@ -131,7 +131,7 @@ func NewService(id string) *Service {
 				Method:      "get",
 				Headers:     [][]string{},
 				Parameters:  [][]string{},
-				URI:         "/item/{$id}",
+				URI:         "/anything/{$id}",
 				Body:        "",
 			},
 			Endpoint{
@@ -141,7 +141,7 @@ func NewService(id string) *Service {
 				Method:      "put",
 				Headers:     [][]string{},
 				Parameters:  [][]string{},
-				URI:         "/item/{$id}",
+				URI:         "/anything/{$id}",
 				Body:        `{"name":"{$name}","type":"{$type:default}"}`,
 			},
 			Endpoint{
@@ -151,7 +151,7 @@ func NewService(id string) *Service {
 				Method:      "delete",
 				Headers:     [][]string{},
 				Parameters:  [][]string{},
-				URI:         "/item/{$id}",
+				URI:         "/anything/{$id}",
 				Body:        "",
 			},
 		},
