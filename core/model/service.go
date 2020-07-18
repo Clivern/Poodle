@@ -108,7 +108,7 @@ func NewService(id string) *Service {
 				Method:      "post",
 				Headers:     [][]string{},
 				Parameters:  [][]string{},
-				URI:         "/anything/{$id}",
+				URI:         "/anything",
 				Body:        `{"name":"{$name}","type":"{$type:default}"}`,
 			},
 			Endpoint{
