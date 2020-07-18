@@ -106,7 +106,7 @@ func (c *Caller) MergeFields(m1, m2 map[string]Field) map[string]Field {
 }
 
 // Call calls the remote service
-func (c *Caller) Call(endpointID string, service *model.Service, fields map[string]Field) (string, error) {
+func (c *Caller) Call(endpointID string, service *model.Service, fields map[string]Field) (*http.Response, error) {
 	var response *http.Response
 	var err error
 
@@ -185,19 +185,10 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 	}
 
 	if err != nil {
-		return "", err
+		return response, err
 	}
 
-	responseCode := c.HTTPClient.GetStatusCode(response)
-	body, err := c.HTTPClient.ToString(response)
-
-	if err != nil {
-		return "", err
-	}
-
-	proto := response.Proto
-
-	return c.Pretty(proto, responseCode, response.Header, body), nil
+	return response, nil
 }
 
 // ReplaceVars replaces vars
@@ -224,23 +215,31 @@ func (c *Caller) ReplaceVars(data string, fields map[string]Field) string {
 }
 
 // Pretty returns colored output
-func (c *Caller) Pretty(proto string, responseCode int, headers map[string][]string, body string) string {
+func (c *Caller) Pretty(response *http.Response) string {
+	body, err := c.HTTPClient.ToString(response)
+
+	if err != nil {
+		body = fmt.Sprintf("Error %s", err.Error())
+	}
+
+	responseCode := c.HTTPClient.GetStatusCode(response)
+
 	value := "\n---\n"
 
 	value = value + fmt.Sprintf(
 		"%s %d %s\n",
-		Blue(proto),
+		Blue(response.Proto),
 		Blue(responseCode),
 		Cyan(http.StatusText(responseCode)),
 	)
 
-	for k, v := range headers {
+	for k, v := range response.Header {
 		for _, h := range v {
 			value = value + fmt.Sprintf("%s: %s\n", Cyan(k), h)
 		}
 	}
 
-	value = value + fmt.Sprintf("%s", Yellow(body))
+	value = value + fmt.Sprintf("\n%s", Yellow(body))
 
 	return value
 }

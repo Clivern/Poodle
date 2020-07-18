@@ -158,7 +158,7 @@ var callCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println(response)
+		fmt.Println(caller.Pretty(response))
 	},
 }
 
