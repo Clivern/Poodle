@@ -81,13 +81,13 @@ func (c *Caller) ParseFields(data string) map[string]Field {
 		if strings.Contains(item, ":") {
 			ita = strings.Split(item, ":")
 			fields[ita[0]] = Field{
-				Prompt:     fmt.Sprintf(`$%s (default='%s'):`, ita[0], ita[1]),
+				Prompt:     fmt.Sprintf(`$%s (default='%s'):`, ita[0], Yellow(ita[1])),
 				IsOptional: true,
 				Default:    ita[1],
 			}
 		} else {
 			fields[item] = Field{
-				Prompt:     fmt.Sprintf(`$%s* (default=''):`, item),
+				Prompt:     fmt.Sprintf(`$%s%s (default=''):`, item, Red("*")),
 				IsOptional: false,
 				Default:    "",
 			}
