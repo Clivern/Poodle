@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/clivern/poodle/core/model"
 	"github.com/clivern/poodle/core/util"
@@ -134,6 +136,14 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		for _, parameter := range end.Parameters {
 			parameters[parameter[0]] = c.ReplaceVars(parameter[1], fields)
 		}
+
+		timeout, err := strconv.Atoi(strings.Replace(service.Main.Timeout, "s", "", -1))
+
+		if err != nil {
+			return response, err
+		}
+
+		c.HTTPClient.Timeout = time.Duration(timeout)
 
 		if end.Method == "get" {
 			response, err = c.HTTPClient.Get(

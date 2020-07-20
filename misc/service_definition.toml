@@ -19,7 +19,7 @@
         header = ["Authorization", "base64({$username}:{$password})"]
 
     [Security.ApiKey]
-        header = ["X-API-KEY", "secret goes here"]
+        header = ["X-API-KEY", "{$apikey:default}"]
 
     [Security.Bearer]
         header = ["Authorization", "Bearer {$token}"]

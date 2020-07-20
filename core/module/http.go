@@ -16,11 +16,15 @@ import (
 )
 
 // HTTPClient struct
-type HTTPClient struct{}
+type HTTPClient struct {
+	Timeout time.Duration
+}
 
 // NewHTTPClient creates an instance of http client
 func NewHTTPClient() *HTTPClient {
-	return &HTTPClient{}
+	return &HTTPClient{
+		Timeout: time.Duration(30),
+	}
 }
 
 // Get http call
@@ -41,7 +45,7 @@ func (h *HTTPClient) Get(ctx context.Context, endpoint string, parameters, heade
 	}
 
 	client := http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * h.Timeout,
 	}
 
 	resp, err := client.Do(req)
@@ -71,7 +75,7 @@ func (h *HTTPClient) Post(ctx context.Context, endpoint string, data string, par
 	}
 
 	client := http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * h.Timeout,
 	}
 
 	resp, err := client.Do(req)
@@ -101,7 +105,7 @@ func (h *HTTPClient) Put(ctx context.Context, endpoint string, data string, para
 	}
 
 	client := http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * h.Timeout,
 	}
 
 	resp, err := client.Do(req)
@@ -131,7 +135,7 @@ func (h *HTTPClient) Patch(ctx context.Context, endpoint string, data string, pa
 	}
 
 	client := http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * h.Timeout,
 	}
 
 	resp, err := client.Do(req)
@@ -161,7 +165,7 @@ func (h *HTTPClient) Delete(ctx context.Context, endpoint string, parameters, he
 	}
 
 	client := http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * h.Timeout,
 	}
 
 	resp, err := client.Do(req)
