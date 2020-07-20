@@ -11,7 +11,9 @@
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
-<br/>
+<p align="center">
+<img src="/assets/carbon.png" width="70%" />
+</p>
 <h4 align="center">
     <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the Demo!</a>
 </h4>
