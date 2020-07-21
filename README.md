@@ -6,13 +6,13 @@
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
         <a href="https://travis-ci.com/Clivern/Poodle"><img src="https://travis-ci.com/Clivern/Poodle.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.1.6-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.1.6"></a>
+        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.1.7-red.svg"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.1.7"></a>
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
 <p align="center">
-<img src="/assets/carbon.png" width="70%" />
+    <img src="/assets/carbon.png" width="70%" />
 </p>
 <h4 align="center">
     <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the Demo!</a>

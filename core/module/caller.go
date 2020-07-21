@@ -15,7 +15,7 @@ import (
 
 	"github.com/clivern/poodle/core/model"
 	"github.com/clivern/poodle/core/util"
-	. "github.com/logrusorgru/aurora"
+	. "github.com/logrusorgru/aurora/v3"
 )
 
 // Caller struct
