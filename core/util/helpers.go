@@ -220,3 +220,8 @@ func EnsureDir(dirName string, mode int) (bool, error) {
 	}
 	return false, err
 }
+
+// DeleteFile deletes a file
+func DeleteFile(path string) error {
+	return os.Remove(path)
+}

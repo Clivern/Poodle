@@ -13,6 +13,7 @@ import (
 	"github.com/clivern/poodle/core/module"
 	"github.com/clivern/poodle/core/util"
 
+	. "github.com/logrusorgru/aurora/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -194,7 +195,7 @@ var configureCmd = &cobra.Command{
 			"file": Config,
 		}).Debug("Configs Updated")
 
-		fmt.Println("Configs Updated")
+		fmt.Println(Green("Configs Updated"))
 	},
 }
 

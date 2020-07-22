@@ -15,6 +15,7 @@ import (
 	"github.com/clivern/poodle/core/util"
 
 	"github.com/briandowns/spinner"
+	. "github.com/logrusorgru/aurora/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -171,7 +172,7 @@ var syncCmd = &cobra.Command{
 
 		spin.Stop()
 
-		fmt.Println("Already up-to-date")
+		fmt.Println(Green("Already up-to-date"))
 	},
 }
 

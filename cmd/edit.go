@@ -12,6 +12,7 @@ import (
 	"github.com/clivern/poodle/core/module"
 	"github.com/clivern/poodle/core/util"
 
+	. "github.com/logrusorgru/aurora/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -106,7 +107,7 @@ var editCmd = &cobra.Command{
 			"file": absPath,
 		}).Debug("Service file updated")
 
-		fmt.Println("Service file updated")
+		fmt.Println(Green("Service file updated"))
 	},
 }
 

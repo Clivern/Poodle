@@ -13,6 +13,7 @@ import (
 	"github.com/clivern/poodle/core/module"
 	"github.com/clivern/poodle/core/util"
 
+	. "github.com/logrusorgru/aurora/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -113,7 +114,7 @@ var newCmd = &cobra.Command{
 			"file": absPath,
 		}).Debug("Service file created")
 
-		fmt.Println("Service file created")
+		fmt.Println(Green("Service file created successfully"))
 	},
 }
 
