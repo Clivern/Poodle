@@ -98,7 +98,7 @@ var deleteCmd = &cobra.Command{
 			result, err = finder.Show(data)
 		} else {
 			result, err = prompt.Select(
-				fmt.Sprintf("Select an Endpoint"),
+				fmt.Sprintf("Select a Service"),
 				data,
 			)
 		}

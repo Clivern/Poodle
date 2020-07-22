@@ -6,8 +6,8 @@
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
         <a href="https://travis-ci.com/Clivern/Poodle"><img src="https://travis-ci.com/Clivern/Poodle.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.2.0-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.2.0"></a>
+        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.3.0-red.svg"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.3.0"></a>
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
@@ -54,6 +54,7 @@ Usage:
 Available Commands:
   call        Interact with one of the configured services
   configure   Configure Poodle
+  delete      Delete a service definition file
   edit        Edit service definition file
   help        Help about any command
   license     Print the license
@@ -97,8 +98,14 @@ $ poodle edit
 
 To start calling your services endpoints:
 
-```
+```zsh
 $ poodle call
+```
+
+To delete a service definition file:
+
+```zsh
+$ poodle delete
 ```
 
 For more info how to create an API service definition, [please check this file.](/misc/service_definition.toml)
