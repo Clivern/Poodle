@@ -80,17 +80,17 @@ func NewService(id string) *Service {
 		Security: Security{
 			Scheme: "none",
 			Basic: Basic{
-				Username: "~~ username here ~~",
-				Password: "~~ password here ~~",
+				Username: "{$authUsername:default}",
+				Password: "{$authPassword:default}",
 				Header: []string{
 					"Authorization",
-					"base64({$username}:{$password})",
+					"Basic base64(username:password)",
 				},
 			},
 			APIKey: APIKey{
 				Header: []string{
 					"X-API-KEY",
-					"~~ secret goes here ~~",
+					"{$authApiKey:default}",
 				},
 			},
 			Bearer: Bearer{

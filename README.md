@@ -6,8 +6,8 @@
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
         <a href="https://travis-ci.com/Clivern/Poodle"><img src="https://travis-ci.com/Clivern/Poodle.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.1.7-red.svg"></a>
-        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.1.7"></a>
+        <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-0.2.0-red.svg"></a>
+        <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=0.2.0"></a>
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
@@ -100,6 +100,8 @@ To start calling your services endpoints:
 ```
 $ poodle call
 ```
+
+For more info how to create an API service definition, [please check this file.](/misc/service_definition.toml)
 
 
 ## Versioning

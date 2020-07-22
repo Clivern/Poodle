@@ -6,6 +6,7 @@ package module
 
 import (
 	"context"
+	b64 "encoding/base64"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -46,6 +47,17 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 	for _, end := range service.Endpoint {
 		if fmt.Sprintf("%s - %s", service.Main.ID, end.ID) != endpointID {
 			continue
+		}
+
+		// Get username and password if auth is api_key
+		if service.Security.Scheme == "api_key" {
+			fields = c.MergeFields(fields, c.ParseFields(service.Security.APIKey.Header[1]))
+		}
+
+		// Get username and password if auth is basic
+		if service.Security.Scheme == "basic" {
+			fields = c.MergeFields(fields, c.ParseFields(service.Security.Basic.Username))
+			fields = c.MergeFields(fields, c.ParseFields(service.Security.Basic.Password))
 		}
 
 		// Get URI vars
@@ -126,6 +138,24 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		data := c.ReplaceVars(end.Body, fields)
 		parameters := make(map[string]string)
 		headers := make(map[string]string)
+
+		// Add api key to headers if auth is api_key
+		if service.Security.Scheme == "api_key" {
+			headers[service.Security.APIKey.Header[0]] = c.ReplaceVars(service.Security.APIKey.Header[1], fields)
+		}
+
+		// Add base64 of username & password if auth is basic
+		if service.Security.Scheme == "basic" {
+			username := c.ReplaceVars(service.Security.Basic.Username, fields)
+			password := c.ReplaceVars(service.Security.Basic.Password, fields)
+
+			headers[service.Security.Basic.Header[0]] = strings.Replace(
+				service.Security.Basic.Header[1],
+				"base64(username:password)",
+				b64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", username, password))),
+				-1,
+			)
+		}
 
 		// Get headers vars
 		for _, header := range end.Headers {

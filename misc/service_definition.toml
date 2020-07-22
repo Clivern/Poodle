@@ -14,12 +14,12 @@
     scheme = "none"
 
     [Security.Basic]
-        username = ""
-        password = ""
-        header = ["Authorization", "base64({$username}:{$password})"]
+        username = "{$authUsername:default}"
+        password = "{$authPassword:default}"
+        header = ["Authorization", "Basic base64(username:password)"]
 
     [Security.ApiKey]
-        header = ["X-API-KEY", "{$apikey:default}"]
+        header = ["X-API-KEY", "{$authApiKey:default}"]
 
     [Security.Bearer]
         header = ["Authorization", "Bearer {$token}"]
