@@ -24,10 +24,10 @@ const ConfigFilePath = "poodle/config.toml"
 
 var rootCmd = &cobra.Command{
 	Use: "poodle",
-	Short: `Work seamlessly with Poodle from the command line.
+	Short: `A fast and beautiful command line tool to build API requests
 
-Poodle is in early stages of development, and we'd love to hear your
-feedback at <https://github.com/Clivern/Poodle>`,
+If you have any suggestions, bug reports, or annoyances please report
+them to our issue tracker at <https://github.com/clivern/poodle/issues>`,
 }
 
 func init() {

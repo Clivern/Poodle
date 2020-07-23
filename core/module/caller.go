@@ -49,9 +49,14 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 			continue
 		}
 
-		// Get username and password if auth is api_key
+		// Get api key if auth is api_key
 		if service.Security.Scheme == "api_key" {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.APIKey.Header[1]))
+		}
+
+		// Get bearer token if auth is bearer
+		if service.Security.Scheme == "bearer" {
+			fields = c.MergeFields(fields, c.ParseFields(service.Security.Bearer.Header[1]))
 		}
 
 		// Get username and password if auth is basic
@@ -142,6 +147,11 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		// Add api key to headers if auth is api_key
 		if service.Security.Scheme == "api_key" {
 			headers[service.Security.APIKey.Header[0]] = c.ReplaceVars(service.Security.APIKey.Header[1], fields)
+		}
+
+		// Add bearer token to headers if auth is bearer
+		if service.Security.Scheme == "bearer" {
+			headers[service.Security.Bearer.Header[0]] = c.ReplaceVars(service.Security.Bearer.Header[1], fields)
 		}
 
 		// Add base64 of username & password if auth is basic

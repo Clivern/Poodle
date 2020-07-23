@@ -96,7 +96,7 @@ func NewService(id string) *Service {
 			Bearer: Bearer{
 				Header: []string{
 					"Authorization",
-					"Bearer {$token}",
+					"Bearer {$authBearerToken:default}",
 				},
 			},
 		},
@@ -188,7 +188,7 @@ func NewEmptyService(id string) *Service {
 			Bearer: Bearer{
 				Header: []string{
 					"Authorization",
-					"Bearer {$token}",
+					"Bearer {$authBearerToken:default}",
 				},
 			},
 		},

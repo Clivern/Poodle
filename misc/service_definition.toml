@@ -21,8 +21,10 @@
     [Security.ApiKey]
         header = ["X-API-KEY", "{$authApiKey:default}"]
 
+    # In case of bearer authentication, it is recommended to create another
+    # service or endpoint to generate the bearer tokens
     [Security.Bearer]
-        header = ["Authorization", "Bearer {$token}"]
+        header = ["Authorization", "Bearer {$authBearerToken:default}"]
 
 [[Endpoint]]
     id = "CreateItem"
