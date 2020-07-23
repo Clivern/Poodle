@@ -158,6 +158,55 @@ func NewService(id string) *Service {
 	}
 }
 
+// NewEmptyService creates an empty instance of Service
+func NewEmptyService(id string) *Service {
+	return &Service{
+		Main: Main{
+			ID:          id,
+			Timeout:     "30s",
+			Name:        "",
+			Description: "",
+			ServiceURL:  "",
+			Headers:     [][]string{},
+		},
+		Security: Security{
+			Scheme: "none",
+			Basic: Basic{
+				Username: "{$authUsername:default}",
+				Password: "{$authPassword:default}",
+				Header: []string{
+					"Authorization",
+					"Basic base64(username:password)",
+				},
+			},
+			APIKey: APIKey{
+				Header: []string{
+					"X-API-KEY",
+					"{$authApiKey:default}",
+				},
+			},
+			Bearer: Bearer{
+				Header: []string{
+					"Authorization",
+					"Bearer {$token}",
+				},
+			},
+		},
+		Endpoint: []Endpoint{
+			Endpoint{
+				ID:          "",
+				Name:        "",
+				Description: "",
+				Method:      "",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "",
+				Body:        ``,
+			},
+		},
+	}
+}
+
 // Decode decodes from file to struct
 func (s *Service) Decode(path string) error {
 	if _, err := toml.DecodeFile(path, &s); err != nil {

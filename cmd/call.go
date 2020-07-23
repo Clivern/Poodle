@@ -68,7 +68,7 @@ var callCmd = &cobra.Command{
 		for _, v := range files {
 			if strings.Contains(v.Name, ".toml") {
 
-				service = model.NewService(v.Name)
+				service = model.NewEmptyService(v.Name)
 				err = service.Decode(v.Path)
 
 				if err != nil {
