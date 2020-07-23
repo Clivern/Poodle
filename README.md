@@ -27,7 +27,7 @@ Poodle is an interactive command line tool to build and test web APIs based on a
 - Use variables in endpoints definitions.
 - Painless debugging and interaction with APIs.
 - Search web services and endpoints interactively.
-- Edit services and endpoints easily (config is just a TOML file).
+- Edit services and endpoints easily ([config is just a TOML file](/misc/service_definition.toml)).
 - Sync services via Gist automatically.
 
 ## Documentation
