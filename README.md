@@ -43,10 +43,10 @@ To list all commands and options
 ```zsh
 $ poodle help
 
-Work seamlessly with Poodle from the command line.
+A fast and beautiful command line tool to build API requests
 
-Poodle is in early stages of development, and we'd love to hear your
-feedback at <https://github.com/Clivern/Poodle>
+If you have any suggestions, bug reports, or annoyances please report
+them to our issue tracker at <https://github.com/clivern/poodle/issues>
 
 Usage:
   poodle [command]
