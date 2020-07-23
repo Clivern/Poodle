@@ -192,18 +192,7 @@ func NewEmptyService(id string) *Service {
 				},
 			},
 		},
-		Endpoint: []Endpoint{
-			Endpoint{
-				ID:          "",
-				Name:        "",
-				Description: "",
-				Method:      "",
-				Headers:     [][]string{},
-				Parameters:  [][]string{},
-				URI:         "",
-				Body:        ``,
-			},
-		},
+		Endpoint: []Endpoint{},
 	}
 }
 
