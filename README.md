@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://youtu.be/PifMSY8-PO4" target="_blank">
-      <img src="/assets/gopher1.png" width="180" />
+      <img src="/assets/gopher2.png" width="180" />
     </a>
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
