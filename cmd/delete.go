@@ -108,6 +108,21 @@ var deleteCmd = &cobra.Command{
 			return
 		}
 
+		choice, err := prompt.Select(
+			fmt.Sprintf("Are you sure"),
+			[]string{"No", "Yes"},
+		)
+
+		if err != nil {
+			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		if choice == "No" {
+			fmt.Println(Red("Service file deletion skipped!"))
+			return
+		}
+
 		spin := spinner.New(spinner.CharSets[26], 100*time.Millisecond)
 		spin.Color("green")
 		spin.Start()
@@ -120,7 +135,7 @@ var deleteCmd = &cobra.Command{
 			fmt.Printf("Error: %s", err.Error())
 		}
 
-		fmt.Println(Green("Service file deleted successfully"))
+		fmt.Println(Green("Service file deleted successfully!"))
 	},
 }
 
