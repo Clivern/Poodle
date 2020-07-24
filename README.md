@@ -111,6 +111,10 @@ $ poodle delete
 For more info how to create an API service definition, [please check this file.](/misc/service_definition.toml)
 
 
+## Upgrade Notes
+
+To upgrade from version `1.x.x` to version `2.x.x`, It is recommended to delete the remote github gist and poodle will sync changes in a new proper way.
+
 ## Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, Poodle is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.
