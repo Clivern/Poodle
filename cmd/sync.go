@@ -94,11 +94,36 @@ var syncCmd = &cobra.Command{
 			}
 		}
 
+		localFS := module.NewFileSystem()
+		remoteFs := module.NewFileSystem()
+
+		err = localFS.LoadFromLocal(conf.Services.Directory, "toml")
+
+		if err != nil {
+			fmt.Printf(
+				"Error while reading local files inside %s: %s",
+				conf.Services.Directory,
+				err.Error(),
+			)
+			return
+		}
+
+		localData, err := localFS.ConvertToJSON()
+
+		if err != nil {
+			fmt.Printf(
+				"Error while converting local files data to json %s: %s",
+				conf.Services.Directory,
+				err.Error(),
+			)
+			return
+		}
+
 		if strings.TrimSpace(conf.Gist.GistID) == "" || !found {
 			// Create github gist
 			files := make(map[string]module.File)
 			files["poodle"] = module.File{
-				Content:  "#",
+				Content:  localData,
 				Filename: "poodle",
 			}
 
@@ -130,45 +155,88 @@ var syncCmd = &cobra.Command{
 			}
 		}
 
-		status, err := githubClient.GetSyncStatus(
+		remoteGist, err := githubClient.GetGist(context.TODO(), conf.Gist.GistID)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while fetching remote gist: %s",
+				err.Error(),
+			)
+			return
+		}
+
+		if _, found := remoteGist.Files["poodle"]; found {
+
+			ok, err = remoteFs.LoadFromJSON([]byte(remoteGist.Files["poodle"].Content))
+
+			if !ok || err != nil {
+				fmt.Printf(
+					"Error while loading remote fs from json: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			err = localFS.Sync(remoteFs)
+
+			if err != nil {
+				fmt.Printf(
+					"Error while sync remote and local fs: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			remoteData, err := remoteFs.ConvertToJSON()
+
+			if err != nil {
+				fmt.Printf(
+					"Error while converting remote data to json: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			remoteGist.Files["poodle"] = module.File{
+				Content:  remoteData,
+				Filename: "poodle",
+			}
+		} else {
+			remoteGist.Files["poodle"] = module.File{
+				Content:  localData,
+				Filename: "poodle",
+			}
+		}
+
+		err = localFS.DumpLocally(conf.Services.Directory)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while updating local files: %s",
+				err.Error(),
+			)
+			return
+		}
+
+		_, err = githubClient.UpdateGist(
 			context.TODO(),
-			conf.Services.Directory,
 			conf.Gist.GistID,
+			module.Gist{
+				Description: "Poodle",
+				Public:      conf.Gist.Public,
+				Files:       remoteGist.Files,
+			},
 		)
 
 		if err != nil {
 			fmt.Printf(
-				"Error while fetching sync status: %s",
+				"Error while updating remote gist: %s",
 				err.Error(),
 			)
 			return
 		}
 
-		if status == "upload" {
-			ok, err = githubClient.SyncByUpload(
-				context.TODO(),
-				conf.Services.Directory,
-				conf.Gist.GistID,
-			)
-		} else {
-			ok, err = githubClient.SyncByDownload(
-				context.TODO(),
-				conf.Services.Directory,
-				conf.Gist.GistID,
-			)
-		}
-
-		if !ok || err != nil {
-			fmt.Printf(
-				"Error while syncing services definitions directory: %s",
-				err.Error(),
-			)
-			return
-		}
-
-		log.WithFields(log.Fields{
-			"status": status,
-		}).Debug("Sync Done")
+		log.Debug("Sync Done")
 
 		spin.Stop()
 

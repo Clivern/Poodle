@@ -5,6 +5,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
@@ -24,6 +25,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a service definition file",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
+		var ok bool
 
 		if Verbose {
 			log.SetLevel(log.DebugLevel)
@@ -129,11 +131,112 @@ var deleteCmd = &cobra.Command{
 
 		err = util.DeleteFile(index[result])
 
-		spin.Stop()
-
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
 		}
+
+		// Delete remotely
+		if conf.Gist.Username == "" || conf.Gist.AccessToken == "" {
+			spin.Stop()
+			fmt.Println(Green("Service file deleted successfully!"))
+			return
+		}
+
+		githubClient := module.NewGithubClient(
+			module.NewHTTPClient(),
+			module.GithubAPI,
+			conf.Gist.Username,
+			conf.Gist.AccessToken,
+		)
+
+		oauth, err := githubClient.Check(context.TODO())
+
+		if err != nil {
+			spin.Stop()
+			fmt.Println(Green("Service file deleted successfully!"))
+			return
+		}
+
+		if !oauth.Valid {
+			spin.Stop()
+			fmt.Println(Green("Service file deleted successfully!"))
+			return
+		}
+
+		remoteGist, err := githubClient.GetGist(context.TODO(), conf.Gist.GistID)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while fetching remote gist: %s",
+				err.Error(),
+			)
+			return
+		}
+
+		remoteFs := module.NewFileSystem()
+
+		if _, found := remoteGist.Files["poodle"]; found {
+
+			ok, err = remoteFs.LoadFromJSON([]byte(remoteGist.Files["poodle"].Content))
+
+			if !ok || err != nil {
+				fmt.Printf(
+					"Error while loading remote fs from json: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			delete(remoteFs.Files, strings.Replace(
+				index[result],
+				util.EnsureTrailingSlash(conf.Services.Directory),
+				"",
+				-1,
+			))
+
+			if err != nil {
+				fmt.Printf(
+					"Error while sync remote and local fs: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			remoteData, err := remoteFs.ConvertToJSON()
+
+			if err != nil {
+				fmt.Printf(
+					"Error while converting remote data to json: %s",
+					err.Error(),
+				)
+				return
+			}
+
+			remoteGist.Files["poodle"] = module.File{
+				Content:  remoteData,
+				Filename: "poodle",
+			}
+		}
+
+		_, err = githubClient.UpdateGist(
+			context.TODO(),
+			conf.Gist.GistID,
+			module.Gist{
+				Description: "Poodle",
+				Public:      conf.Gist.Public,
+				Files:       remoteGist.Files,
+			},
+		)
+
+		if err != nil {
+			fmt.Printf(
+				"Error while updating remote gist: %s",
+				err.Error(),
+			)
+			return
+		}
+
+		spin.Stop()
 
 		fmt.Println(Green("Service file deleted successfully!"))
 	},
