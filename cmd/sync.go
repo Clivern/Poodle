@@ -208,8 +208,6 @@ var syncCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Println(localFS.Files)
-
 		err = localFS.DumpLocally(conf.Services.Directory)
 
 		if err != nil {
