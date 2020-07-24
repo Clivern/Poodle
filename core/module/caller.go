@@ -144,6 +144,11 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		parameters := make(map[string]string)
 		headers := make(map[string]string)
 
+		// addd service global headers
+		for _, header := range service.Main.Headers {
+			headers[header[0]] = header[1]
+		}
+
 		// Add api key to headers if auth is api_key
 		if service.Security.Scheme == "api_key" {
 			headers[service.Security.APIKey.Header[0]] = c.ReplaceVars(service.Security.APIKey.Header[1], fields)
