@@ -144,7 +144,7 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		parameters := make(map[string]string)
 		headers := make(map[string]string)
 
-		// addd service global headers
+		// add service global headers
 		for _, header := range service.Main.Headers {
 			headers[header[0]] = header[1]
 		}
