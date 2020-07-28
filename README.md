@@ -17,7 +17,7 @@
 </p>
 -->
 <p align="center">
-    <img src="/assets/poodle_showcase.gif" width="80%" />
+    <img src="/assets/poodle_showcase.gif" width="85%" />
 </p>
 <h4 align="center">
      <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the full Demo!</a>
