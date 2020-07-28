@@ -11,11 +11,16 @@
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
+<!--
 <p align="center">
     <img src="/assets/carbon.png" width="70%" />
 </p>
+-->
+<p align="center">
+    <img src="/assets/poodle_showcase.gif" width="70%" />
+</p>
 <h4 align="center">
-    <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the Demo!</a>
+     <a href="https://youtu.be/PifMSY8-PO4" target="_blank">:unicorn: Check out the full Demo!</a>
 </h4>
 <br/>
 
