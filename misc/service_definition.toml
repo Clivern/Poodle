@@ -27,6 +27,18 @@
         header = ["Authorization", "Bearer {$authBearerToken:default}"]
 
 [[Endpoint]]
+    id = "GetSystemHealth"
+    name = "Get system health"
+    description = ""
+    method = "get"
+    # Security will be skipped for this endpoint
+    public = true
+    headers = []
+    parameters = []
+    uri = "/_health"
+    body = ""
+
+[[Endpoint]]
     id = "CreateItem"
     name = "Create an item"
     description = ""
