@@ -22,7 +22,7 @@ func TestCallerPostRequest(t *testing.T) {
 		service := model.NewService("anything")
 
 		fields01 := caller.GetFields(
-			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[0].ID),
+			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[1].ID),
 			service,
 		)
 
@@ -37,7 +37,7 @@ func TestCallerPostRequest(t *testing.T) {
 		pkg.Expect(t, "", fields01["type"].Value)
 
 		res, err := caller.Call(
-			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[0].ID),
+			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[1].ID),
 			service,
 			fields01,
 		)
@@ -55,36 +55,6 @@ func TestCallerPostRequest(t *testing.T) {
 // TestCallerGetRequest test cases
 func TestCallerGetRequest(t *testing.T) {
 	t.Run("TestCallerGetRequest", func(t *testing.T) {
-		httpClient := NewHTTPClient()
-		caller := NewCaller(httpClient)
-		service := model.NewService("anything")
-
-		service.Endpoint[2].URI = "/anything"
-
-		fields01 := caller.GetFields(
-			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[2].ID),
-			service,
-		)
-
-		res, err := caller.Call(
-			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[2].ID),
-			service,
-			fields01,
-		)
-
-		pkg.Expect(t, nil, err)
-
-		body, err := httpClient.ToString(res)
-
-		pkg.Expect(t, nil, err)
-		pkg.Expect(t, 200, httpClient.GetStatusCode(res))
-		pkg.Expect(t, true, strings.Contains(body, "GET"))
-	})
-}
-
-// TestCallerPutRequest test cases
-func TestCallerPutRequest(t *testing.T) {
-	t.Run("TestCallerPutRequest", func(t *testing.T) {
 		httpClient := NewHTTPClient()
 		caller := NewCaller(httpClient)
 		service := model.NewService("anything")
@@ -108,13 +78,13 @@ func TestCallerPutRequest(t *testing.T) {
 
 		pkg.Expect(t, nil, err)
 		pkg.Expect(t, 200, httpClient.GetStatusCode(res))
-		pkg.Expect(t, true, strings.Contains(body, "PUT"))
+		pkg.Expect(t, true, strings.Contains(body, "GET"))
 	})
 }
 
-// TestCallerDeleteRequest test cases
-func TestCallerDeleteRequest(t *testing.T) {
-	t.Run("TestCallerDeleteRequest", func(t *testing.T) {
+// TestCallerPutRequest test cases
+func TestCallerPutRequest(t *testing.T) {
+	t.Run("TestCallerPutRequest", func(t *testing.T) {
 		httpClient := NewHTTPClient()
 		caller := NewCaller(httpClient)
 		service := model.NewService("anything")
@@ -128,6 +98,36 @@ func TestCallerDeleteRequest(t *testing.T) {
 
 		res, err := caller.Call(
 			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[4].ID),
+			service,
+			fields01,
+		)
+
+		pkg.Expect(t, nil, err)
+
+		body, err := httpClient.ToString(res)
+
+		pkg.Expect(t, nil, err)
+		pkg.Expect(t, 200, httpClient.GetStatusCode(res))
+		pkg.Expect(t, true, strings.Contains(body, "PUT"))
+	})
+}
+
+// TestCallerDeleteRequest test cases
+func TestCallerDeleteRequest(t *testing.T) {
+	t.Run("TestCallerDeleteRequest", func(t *testing.T) {
+		httpClient := NewHTTPClient()
+		caller := NewCaller(httpClient)
+		service := model.NewService("anything")
+
+		service.Endpoint[5].URI = "/anything"
+
+		fields01 := caller.GetFields(
+			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[5].ID),
+			service,
+		)
+
+		res, err := caller.Call(
+			fmt.Sprintf("%s - %s", service.Main.ID, service.Endpoint[5].ID),
 			service,
 			fields01,
 		)

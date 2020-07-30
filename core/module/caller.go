@@ -50,17 +50,17 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 		}
 
 		// Get api key if auth is api_key
-		if service.Security.Scheme == "api_key" {
+		if service.Security.Scheme == "api_key" && !end.Public {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.APIKey.Header[1]))
 		}
 
 		// Get bearer token if auth is bearer
-		if service.Security.Scheme == "bearer" {
+		if service.Security.Scheme == "bearer" && !end.Public {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.Bearer.Header[1]))
 		}
 
 		// Get username and password if auth is basic
-		if service.Security.Scheme == "basic" {
+		if service.Security.Scheme == "basic" && !end.Public {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.Basic.Username))
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.Basic.Password))
 		}
@@ -150,17 +150,17 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 		}
 
 		// Add api key to headers if auth is api_key
-		if service.Security.Scheme == "api_key" {
+		if service.Security.Scheme == "api_key" && !end.Public {
 			headers[service.Security.APIKey.Header[0]] = c.ReplaceVars(service.Security.APIKey.Header[1], fields)
 		}
 
 		// Add bearer token to headers if auth is bearer
-		if service.Security.Scheme == "bearer" {
+		if service.Security.Scheme == "bearer" && !end.Public {
 			headers[service.Security.Bearer.Header[0]] = c.ReplaceVars(service.Security.Bearer.Header[1], fields)
 		}
 
 		// Add base64 of username & password if auth is basic
-		if service.Security.Scheme == "basic" {
+		if service.Security.Scheme == "basic" && !end.Public {
 			username := c.ReplaceVars(service.Security.Basic.Username, fields)
 			password := c.ReplaceVars(service.Security.Basic.Password, fields)
 

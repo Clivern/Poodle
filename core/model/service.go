@@ -55,6 +55,7 @@ type Endpoint struct {
 	Parameters  [][]string `toml:"parameters"`
 	URI         string     `toml:"uri"`
 	Body        string     `toml:"body"`
+	Public      bool       `toml:"public"`
 }
 
 // Service type
@@ -101,6 +102,17 @@ func NewService(id string) *Service {
 			},
 		},
 		Endpoint: []Endpoint{
+			Endpoint{
+				ID:          "GetSystemHealth",
+				Name:        "Get system health",
+				Description: "",
+				Method:      "get",
+				Headers:     [][]string{},
+				Parameters:  [][]string{},
+				URI:         "/anything",
+				Public:      true,
+				Body:        "",
+			},
 			Endpoint{
 				ID:          "CreateItem",
 				Name:        "Create an item",
