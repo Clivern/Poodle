@@ -49,6 +49,9 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 			continue
 		}
 
+		// Get Service URL
+		fields = c.MergeFields(fields, c.ParseFields(service.Main.ServiceURL))
+
 		// Get api key if auth is api_key
 		if service.Security.Scheme == "api_key" && !end.Public {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.APIKey.Header[1]))
@@ -86,6 +89,7 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 }
 
 // ParseFields parses a string to fetch fields
+// @TODO update to do a proper matching to support something like {$serviceURL:http://127.0.0.1:8080}
 func (c *Caller) ParseFields(data string) map[string]Field {
 	var ita []string
 	m := regexp.MustCompile(`{\$(.*?)}`)
@@ -136,7 +140,7 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 
 		url := fmt.Sprintf(
 			"%s%s",
-			util.EnsureTrailingSlash(service.Main.ServiceURL),
+			util.EnsureTrailingSlash(c.ReplaceVars(service.Main.ServiceURL, fields)),
 			util.RemoveStartingSlash(c.ReplaceVars(end.URI, fields)),
 		)
 

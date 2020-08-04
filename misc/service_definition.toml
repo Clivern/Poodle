@@ -5,6 +5,7 @@
     name = "clivern - poodle"
     description = ""
     timeout = "30s"
+    # service_url can also be a variable with default value {$serviceURL:http://127.0.0.1:8080}
     service_url = "https://example.com/api/v1"
     # These headers will be applied to all endpoints http calls
     headers = [ ["Content-Type", "application/json"] ]
