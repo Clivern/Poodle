@@ -49,6 +49,9 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 			continue
 		}
 
+		// Get Service URL
+		fields = c.MergeFields(fields, c.ParseFields(service.Main.ServiceURL))
+
 		// Get api key if auth is api_key
 		if service.Security.Scheme == "api_key" && !end.Public {
 			fields = c.MergeFields(fields, c.ParseFields(service.Security.APIKey.Header[1]))
@@ -88,28 +91,49 @@ func (c *Caller) GetFields(endpointID string, service *model.Service) map[string
 // ParseFields parses a string to fetch fields
 func (c *Caller) ParseFields(data string) map[string]Field {
 	var ita []string
+	var key string
+	var value string
+
 	m := regexp.MustCompile(`{\$(.*?)}`)
 	items := m.FindAllString(data, -1)
 	fields := make(map[string]Field)
 
 	for _, item := range items {
-		item = strings.Replace(item, "$", "", -1)
-		item = strings.Replace(item, "{", "", -1)
-		item = strings.Replace(item, "}", "", -1)
 
-		if strings.Contains(item, ":") {
-			ita = strings.Split(item, ":")
-			fields[ita[0]] = Field{
-				Prompt:     fmt.Sprintf(`$%s (default='%s'):`, ita[0], Yellow(ita[1])),
-				IsOptional: true,
-				Default:    ita[1],
-			}
-		} else {
+		if !strings.HasPrefix(item, `{$`) || !strings.HasSuffix(item, "}") {
+			continue
+		}
+
+		if !strings.Contains(item, ":") {
+			// Incase the item in this format {$var}
+			item = strings.Replace(item, "$", "", -1)
+			item = strings.Replace(item, "{", "", -1)
+			item = strings.Replace(item, "}", "", -1)
+
 			fields[item] = Field{
 				Prompt:     fmt.Sprintf(`$%s%s (default=''):`, item, Red("*")),
 				IsOptional: false,
 				Default:    "",
 			}
+			continue
+		}
+		// Incase the item in this format {$var:default} or {$var:something:complex}
+		// this will match and extract {$....: part
+		m = regexp.MustCompile(`{\$(.*?):`)
+		ita = m.FindAllString(item, -1)
+		key = strings.TrimPrefix(ita[0], `{$`)
+		key = strings.TrimSuffix(key, `:`)
+
+		// this will match and extract :.....} part
+		m = regexp.MustCompile(`:(.*?)}`)
+		ita = m.FindAllString(item, -1)
+		value = strings.TrimPrefix(ita[0], `:`)
+		value = strings.TrimSuffix(value, `}`)
+
+		fields[key] = Field{
+			Prompt:     fmt.Sprintf(`$%s (default='%s'):`, key, Yellow(value)),
+			IsOptional: true,
+			Default:    value,
 		}
 	}
 
@@ -136,7 +160,7 @@ func (c *Caller) Call(endpointID string, service *model.Service, fields map[stri
 
 		url := fmt.Sprintf(
 			"%s%s",
-			util.EnsureTrailingSlash(service.Main.ServiceURL),
+			util.EnsureTrailingSlash(c.ReplaceVars(service.Main.ServiceURL, fields)),
 			util.RemoveStartingSlash(c.ReplaceVars(end.URI, fields)),
 		)
 
