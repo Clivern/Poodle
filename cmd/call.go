@@ -15,6 +15,7 @@ import (
 	"github.com/clivern/poodle/core/util"
 
 	"github.com/briandowns/spinner"
+	. "github.com/logrusorgru/aurora/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -168,6 +169,11 @@ var callCmd = &cobra.Command{
 
 		if err != nil {
 			fmt.Printf("Error: %s", err.Error())
+			return
+		}
+
+		if response == nil {
+			fmt.Println(Red("Invalid Response!"))
 			return
 		}
 
