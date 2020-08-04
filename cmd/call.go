@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -17,6 +18,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+// From var
+var From string
 
 var callCmd = &cobra.Command{
 	Use:   "call",
@@ -50,7 +54,16 @@ var callCmd = &cobra.Command{
 			return
 		}
 
-		files, err := util.ListFiles(util.EnsureTrailingSlash(conf.Services.Directory))
+		files := make(map[string]util.File)
+
+		if From == "" || !util.FileExists(From) {
+			files, err = util.ListFiles(util.EnsureTrailingSlash(conf.Services.Directory))
+		} else {
+			files[filepath.Base(From)] = util.File{
+				Path: From,
+				Name: filepath.Base(From),
+			}
+		}
 
 		if err != nil {
 			fmt.Printf(
@@ -160,6 +173,16 @@ var callCmd = &cobra.Command{
 
 		fmt.Println(caller.Pretty(response))
 	},
+}
+
+func init() {
+	callCmd.PersistentFlags().StringVarP(
+		&From,
+		"from",
+		"f",
+		"./.poodle.toml",
+		"service definition file",
+	)
 }
 
 func init() {
