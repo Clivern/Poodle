@@ -110,7 +110,7 @@ $ poodle call
 To start calling a custom service endpoints without storing it globally:
 
 ```zsh
-# Asuming that .poodle.toml exists on current dir
+# Assuming that .poodle.toml exists on current dir
 $ poodle call -f ./.poodle.toml
 ```
 
