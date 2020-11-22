@@ -5,7 +5,8 @@
     <h3 align="center">Poodle</h3>
     <p align="center">A fast and beautiful command line tool to build API requests</p>
     <p align="center">
-        <a href="https://travis-ci.com/Clivern/Poodle"><img src="https://travis-ci.com/Clivern/Poodle.svg?branch=master"></a>
+        <a href="https://github.com/Clivern/Poodle/actions"><img src="https://github.com/Clivern/Poodle/workflows/Build/badge.svg"></a>
+        <a href="https://github.com/Clivern/Poodle/actions"><img src="https://github.com/Clivern/Poodle/workflows/Release/badge.svg"></a>
         <a href="https://github.com/Clivern/Poodle/releases"><img src="https://img.shields.io/badge/Version-2.2.2-red.svg"></a>
         <a href="https://goreportcard.com/report/github.com/Clivern/Poodle"><img src="https://goreportcard.com/badge/github.com/Clivern/Poodle?v=2.2.2"></a>
         <a href="https://github.com/Clivern/Poodle/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
