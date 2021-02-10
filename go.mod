@@ -9,5 +9,5 @@ require (
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/spf13/cobra v1.1.2
+	github.com/spf13/cobra v1.1.3
 )
