@@ -57,6 +57,8 @@ github.com/BurntSushi/toml v0.4.0 h1:qD/r9AL67srjW6O3fcSKZDsXqzBNX6ieSRywr2hRrdE
 github.com/BurntSushi/toml v0.4.0/go.mod h1:wtejDu7Q0FhCWAo2aXkywSJyYFg01EDTKozLNCz2JBA=
 github.com/BurntSushi/toml v0.4.1 h1:GaI7EiDXDRfa8VshkTj7Fym7ha+y8/XxIgD2okUIjLw=
 github.com/BurntSushi/toml v0.4.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
+github.com/BurntSushi/toml v1.0.0 h1:dtDWrepsVPfW9H/4y7dDgFc2MBUSeJhlaDtK13CxFlU=
+github.com/BurntSushi/toml v1.0.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/toml-test v0.1.1-0.20210620192437-de01089bbf76/go.mod h1:P/PrhmZ37t5llHfDuiouWXtFgqOoQ12SAh9j6EjrBR4=
 github.com/BurntSushi/toml-test v0.1.1-0.20210624055653-1f6389604dc6/go.mod h1:UAIt+Eo8itMZAAgImXkPGDMYsT1SsJkVdB5TuONl86A=
 github.com/BurntSushi/toml-test v0.1.1-0.20210704062846-269931e74e3f/go.mod h1:fnFWrIwqgHsEjVsW3RYCJmDo86oq9eiJ9u6bnqhtm2g=
